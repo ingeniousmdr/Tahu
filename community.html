@@ -27,7 +27,7 @@
       padding: 16px;
     }
 
-    /* Navbar Styles */
+    /* Header Navbar Styles */
     header {
       background: #ffffff;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -60,7 +60,7 @@
       color: #1e293b;
     }
 
-    /* Hamburger Button (Three Dash Icon) */
+    /* Hamburger Toggle Button */
     .menu-toggle {
       display: none;
       background: none;
@@ -77,6 +77,7 @@
       background-color: #f1f5f9;
     }
 
+    /* Desktop Navigation Links */
     .nav-links {
       display: flex;
       align-items: center;
@@ -110,9 +111,8 @@
       background: #fef3c7;
     }
 
-    /* Sidebar Mobile Backdrop Overlay */
-    .nav-overlay {
-      display: none;
+    /* Single Mobile Sidebar & Backdrop */
+    .sidebar-overlay {
       position: fixed;
       top: 0;
       left: 0;
@@ -122,12 +122,56 @@
       backdrop-filter: blur(2px);
       z-index: 9998;
       opacity: 0;
+      pointer-events: none;
       transition: opacity 0.3s ease;
     }
 
-    .nav-overlay.active {
-      display: block;
+    .sidebar-overlay.active {
       opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sidebar-container {
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 260px;
+      height: 100vh;
+      background-color: #ffffff;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+      z-index: 9999;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: left 0.3s ease-in-out;
+    }
+
+    .sidebar-container.active {
+      left: 0;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .sidebar-close-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #64748b;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .sidebar-close-btn:hover {
+      background: #f1f5f9;
+      color: #ef4444;
     }
 
     /* Container */
@@ -569,47 +613,15 @@
       background: #dc2626;
     }
 
-    /* MEDIA QUERIES FOR SLIDE-OUT SIDEBAR MOBILE NAVBAR */
+    /* RESPONSIVE MEDIA QUERIES */
     @media (max-width: 768px) {
       .menu-toggle {
         display: block;
       }
 
-      /* Transform nav-links into a slide-out sidebar */
+      /* Hide inline header nav-links on mobile in favor of sidebar */
       .nav-links {
-        position: fixed;
-        top: 0;
-        right: -280px; /* Hidden off-screen by default */
-        width: 260px;
-        height: 100vh;
-        background-color: #ffffff;
-        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        padding: 80px 20px 20px;
-        z-index: 9999;
-        transition: right 0.3s ease-in-out;
-      }
-
-      .nav-links.active {
-        right: 0; /* Slide in from right */
-      }
-
-      /* Style close button inside sidebar context */
-      .menu-toggle {
-        z-index: 10000;
-      }
-
-      .streak-badge {
-        justify-content: center;
-        margin-bottom: 8px;
-      }
-
-      .nav-btn {
-        text-align: left;
-        padding: 12px 16px;
-        font-size: 1rem;
+        display: none;
       }
     }
 
@@ -660,23 +672,20 @@
 </head>
 <body>
 
+  <!-- Top Navigation Header -->
   <header>
     <nav class="navbar">
       <div class="logo">
+        <!-- Hamburger Button to trigger single sidebar -->
+        <button class="menu-toggle" id="open-sidebar-btn" aria-label="Open Sidebar">
+          <i class="fa-solid fa-bars"></i>
+        </button>
         <img src="icon.png" alt="Logo" class="nav-logo">
         <a href="index.html"><span>Tahu</span></a>
       </div>
 
-      <!-- Hamburger / Close Button -->
-      <button class="menu-toggle" id="menu-toggle-btn" aria-label="Toggle Navigation">
-        <i class="fa-solid fa-bars" id="menu-icon"></i>
-      </button>
-
-      <!-- Sidebar Overlay Background -->
-      <div class="nav-overlay" id="nav-overlay"></div>
-
-      <!-- Slide-out Sidebar Links -->
-      <div class="nav-links" id="nav-links">
+      <!-- Desktop Links -->
+      <div class="nav-links">
         <div class="streak-badge">
           <i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count">1 Day</span>
         </div>
@@ -688,6 +697,30 @@
       </div>
     </nav>
   </header>
+
+  <!-- Single Mobile Sidebar Panel & Overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar-container" id="single-sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <img src="icon.png" alt="Logo" class="nav-logo">
+        <a href="index.html"><span>Tahu</span></a>
+      </div>
+      <button class="sidebar-close-btn" id="close-sidebar-btn" aria-label="Close Sidebar">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="streak-badge">
+      <i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count-mobile">1 Day</span>
+    </div>
+
+    <a href="index.html" class="nav-btn">Home</a>
+    <a href="tips.html" class="nav-btn">Tips</a>
+    <a href="learn.html" class="nav-btn">Aid</a>
+    <a href="quiz.html" class="nav-btn">Quiz</a>
+    <a href="community.html" class="nav-btn active">Community</a>
+  </aside>
 
   <div class="community-container">
     <div class="community-header">
@@ -749,27 +782,25 @@
   </div>
 
   <script>
-    // Sidebar Navigation Handlers
-    const menuToggleBtn = document.getElementById('menu-toggle-btn');
-    const navLinks = document.getElementById('nav-links');
-    const navOverlay = document.getElementById('nav-overlay');
-    const menuIcon = document.getElementById('menu-icon');
+    // Single Sidebar Toggle Elements
+    const openSidebarBtn = document.getElementById('open-sidebar-btn');
+    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+    const singleSidebar = document.getElementById('single-sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-    function toggleMenu() {
-      const isOpen = navLinks.classList.toggle('active');
-      navOverlay.classList.toggle('active');
-
-      if (isOpen) {
-        menuIcon.classList.remove('fa-bars');
-        menuIcon.classList.add('fa-xmark');
-      } else {
-        menuIcon.classList.remove('fa-xmark');
-        menuIcon.classList.add('fa-bars');
-      }
+    function openSidebar() {
+      singleSidebar.classList.add('active');
+      sidebarOverlay.classList.add('active');
     }
 
-    menuToggleBtn.addEventListener('click', toggleMenu);
-    navOverlay.addEventListener('click', toggleMenu);
+    function closeSidebar() {
+      singleSidebar.classList.remove('active');
+      sidebarOverlay.classList.remove('active');
+    }
+
+    openSidebarBtn.addEventListener('click', openSidebar);
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
 
     // 1. Initialize Supabase Client
     const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
@@ -791,7 +822,7 @@
       }, 3000);
     }
 
-    // 2. Load Posts from Database with Fallback Handling
+    // 2. Load Posts from Database
     async function loadPosts() {
       const feedEl = document.getElementById("posts-feed");
       const upvotedPosts = JSON.parse(localStorage.getItem('upvotedPosts') || '[]');
@@ -802,7 +833,7 @@
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.warn("Relational query failed, attempting to load posts without comments...", error);
+        console.warn("Relational query failed, attempting fallback...", error);
         const fallback = await db.from("posts").select("*").order("created_at", { ascending: false });
         
         if (fallback.error) {
