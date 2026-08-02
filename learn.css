@@ -1,29 +1,4 @@
-/* Styles for Mobile Screens */
-@media screen and (max-width: 768px) {
-  /* Prevent horizontal scrolling on the page */
-  body {
-    overflow-x: hidden;
-  }
 
-  /* Make main layout stack vertically instead of side-by-side */
-  .container, .wrapper {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  /* Convert desktop sidebar to top navigation or full-width banner */
-  .sidebar {
-    width: 100% !important;
-    position: relative !important;
-    height: auto !important;
-  }
-
-  /* Ensure content cards don't get cut off */
-  .main-content {
-    width: 100% !important;
-    margin-left: 0 !important;
-    padding: 15px;
-  }
 }
 .navbar {
   display: flex;
