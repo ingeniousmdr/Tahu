@@ -40,8 +40,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative;
-      flex-wrap: wrap;
     }
 
     .logo {
@@ -110,6 +108,26 @@
     .nav-btn:hover, .nav-btn.active {
       color: #f59e0b;
       background: #fef3c7;
+    }
+
+    /* Sidebar Mobile Backdrop Overlay */
+    .nav-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(2px);
+      z-index: 9998;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-overlay.active {
+      display: block;
+      opacity: 1;
     }
 
     /* Container */
@@ -551,33 +569,47 @@
       background: #dc2626;
     }
 
-    /* MEDIA QUERIES FOR MOBILE & COLLAPSIBLE NAVBAR */
+    /* MEDIA QUERIES FOR SLIDE-OUT SIDEBAR MOBILE NAVBAR */
     @media (max-width: 768px) {
       .menu-toggle {
         display: block;
       }
 
+      /* Transform nav-links into a slide-out sidebar */
       .nav-links {
-        display: none;
-        width: 100%;
+        position: fixed;
+        top: 0;
+        right: -280px; /* Hidden off-screen by default */
+        width: 260px;
+        height: 100vh;
+        background-color: #ffffff;
+        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
         flex-direction: column;
         align-items: stretch;
-        gap: 8px;
-        margin-top: 14px;
-        padding-top: 12px;
-        border-top: 1px solid #f1f5f9;
+        gap: 12px;
+        padding: 80px 20px 20px;
+        z-index: 9999;
+        transition: right 0.3s ease-in-out;
       }
 
       .nav-links.active {
-        display: flex;
+        right: 0; /* Slide in from right */
+      }
+
+      /* Style close button inside sidebar context */
+      .menu-toggle {
+        z-index: 10000;
       }
 
       .streak-badge {
         justify-content: center;
+        margin-bottom: 8px;
       }
 
       .nav-btn {
-        text-align: center;
+        text-align: left;
+        padding: 12px 16px;
+        font-size: 1rem;
       }
     }
 
@@ -635,11 +667,15 @@
         <a href="index.html"><span>Tahu</span></a>
       </div>
 
-      <!-- Hamburger Button (Three Dash Icon) -->
+      <!-- Hamburger / Close Button -->
       <button class="menu-toggle" id="menu-toggle-btn" aria-label="Toggle Navigation">
         <i class="fa-solid fa-bars" id="menu-icon"></i>
       </button>
 
+      <!-- Sidebar Overlay Background -->
+      <div class="nav-overlay" id="nav-overlay"></div>
+
+      <!-- Slide-out Sidebar Links -->
       <div class="nav-links" id="nav-links">
         <div class="streak-badge">
           <i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count">1 Day</span>
@@ -713,21 +749,27 @@
   </div>
 
   <script>
-    // Navbar Menu Toggle Handler
+    // Sidebar Navigation Handlers
     const menuToggleBtn = document.getElementById('menu-toggle-btn');
     const navLinks = document.getElementById('nav-links');
+    const navOverlay = document.getElementById('nav-overlay');
     const menuIcon = document.getElementById('menu-icon');
 
-    menuToggleBtn.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      if (navLinks.classList.contains('active')) {
+    function toggleMenu() {
+      const isOpen = navLinks.classList.toggle('active');
+      navOverlay.classList.toggle('active');
+
+      if (isOpen) {
         menuIcon.classList.remove('fa-bars');
         menuIcon.classList.add('fa-xmark');
       } else {
         menuIcon.classList.remove('fa-xmark');
         menuIcon.classList.add('fa-bars');
       }
-    });
+    }
+
+    menuToggleBtn.addEventListener('click', toggleMenu);
+    navOverlay.addEventListener('click', toggleMenu);
 
     // 1. Initialize Supabase Client
     const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
