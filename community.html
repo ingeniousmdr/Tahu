@@ -131,34 +131,46 @@
       opacity: 1;
       pointer-events: auto;
     }
-
-    .sidebar-container {
-      position: fixed;
-      top: 0;
-      left: -280px;
-      width: 260px;
-      height: 100vh;
-      background-color: #ffffff;
-      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-      z-index: 9999;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      transition: left 0.3s ease-in-out;
-    }
+/* Optional: Add a slight pill/card styling to individual items if you want them visible */
+.sidebar-container .nav-btn {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 260px;
+  height: 100vh;
+  /* Make the main background completely transparent */
+  background-color: transparent; 
+  box-shadow: none;
+  z-index: 9999;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: left 0.3s ease-in-out;
+}
 
     .sidebar-container.active {
       left: 0;
     }
 
-    .sidebar-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #f1f5f9;
-    }
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  border-bottom: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
 
     .sidebar-close-btn {
       background: none;
