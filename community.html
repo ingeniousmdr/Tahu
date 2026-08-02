@@ -112,7 +112,7 @@
       background: #fef3c7;
     }
 
-    /* Mobile Slide-Out Sidebar Panel & Overlay */
+    /* Sidebar Overlay */
     .sidebar-overlay {
       position: fixed;
       top: 0;
@@ -123,54 +123,51 @@
       backdrop-filter: blur(2px);
       z-index: 9998;
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
     }
 
     .sidebar-overlay.active {
       opacity: 1;
+      visibility: visible;
       pointer-events: auto;
     }
-/* Optional: Add a slight pill/card styling to individual items if you want them visible */
-.sidebar-container .nav-btn {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  padding: 12px 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-.sidebar-container {
-  position: fixed;
-  top: 0;
-  left: -280px;
-  width: 260px;
-  height: 100vh;
-  /* Make the main background completely transparent */
-  background-color: transparent; 
-  box-shadow: none;
-  z-index: 9999;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  transition: left 0.3s ease-in-out;
-}
 
-    .sidebar-container.active {
-      left: 0;
+    /* Mobile Slide-Out Sidebar Panel - Completely hidden off-screen by default */
+    .sidebar-container {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 260px !important;
+      height: 100vh !important;
+      background-color: #ffffff !important;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+      z-index: 9999 !important;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      
+      /* Smooth transform sliding off-screen */
+      transform: translateX(-100%) !important;
+      visibility: hidden !important;
+      transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out !important;
     }
 
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(8px);
-  border-radius: 14px;
-  border-bottom: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
+    /* Slides in ONLY when active */
+    .sidebar-container.active {
+      transform: translateX(0) !important;
+      visibility: visible !important;
+    }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
 
     .sidebar-close-btn {
       background: none;
