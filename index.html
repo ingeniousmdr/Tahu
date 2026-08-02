@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tahu</title>
+
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/c8c917a1e5.js" crossorigin="anonymous"></script>
+
+  <!-- Stylesheet & Script -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="icon.png" />
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+
+  <!-- Header & Navigation -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <img src="icon.png" alt="Logo" class="nav-logo">
+        <a href="index.html"><span>Tahu</span></a>
+      </div>
+      <div class="nav-links">
+        <div class="streak-badge">
+          <i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count">1 Day</span>
+        </div>
+        
+        <a href="index.html" class="nav-btn active">Home</a>
+        <a href="tips.html" class="nav-btn">Tips</a>
+        <a href="learn.html" class="nav-btn">Aid</a>
+        <!-- Add class "active" to the button corresponding to the current page -->
+        <a href="quiz.html" class="nav-btn ">Quiz</a>
+        <a href="community.html" class="nav-btn">Community</a>
+      </div>
+    </nav>
+<div class="intro">
+  <div class="vid-intro">
+    <img src="banner.png" alt="Tahu Banner" class="banner-img" />
+  </div>
+</div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main>
+    <!-- 3 Core Navigation Cards -->
+    <div class="menu-grid">
+      <!-- 1. TIPS CARD -->
+      <div class="menu-card tips-card">
+        <div class="icon-wrapper"><i class="fa-solid fa-lightbulb"></i></div>
+        <h3>Learning Tips</h3>
+        <p>Tips for learn subject easily</p>
+        <a href="tips.html" class="menu-btn">
+          <span>Get Tips</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- 2. LEARN CARD -->
+      <div class="menu-card learn-card">
+        <div class="icon-wrapper">
+          <i class="fa-solid fa-compass"></i>
+        </div>
+        <h3>Learning Aid</h3>
+        <p>Tools and strategies to boost your learning.</p>
+        <a href="learn.html" class="menu-btn">
+          <span>Start Learning</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- 3. QUIZ CARD -->
+      <div class="menu-card quiz-card">
+        <div class="icon-wrapper"><i class="fa-solid fa-bullseye"></i></div>
+        <h3>Practice Quiz</h3>
+        <p>Challenge yourself with short quizzes and level up your XP.</p>
+        <a href="quiz.html" class="menu-btn">
+          <span>Take Quiz</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Daily Tip Banner -->
+    <div class="daily-tip-box">
+      <div class="tip-header">
+        <i class="fa-solid fa-bolt"></i>
+        <span>Tip of the Day</span>
+      </div>
+      <p class="tip-content" id="daily-tip">
+        "Use the 2-Minute Rule: If a task takes less than two minutes to finish, do it immediately instead of putting it
+        off!"
+      </p>
+    </div>
+
+    <!-- Quick Stats Section -->
+    <section class="stats-section">
+      <h2>Your Daily Activity</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <i class="fa-solid fa-crown"></i>
+          <h3 id="user-rank">Squire</h3>
+          <p>Current Rank</p>
+        </div>
+        <div class="stat-card">
+          <i class="fa-solid fa-fire"></i>
+          <h3 id="streak-count-card">1 Day</h3>
+          <p>Current Streak</p>
+        </div>
+        <div class="stat-card">
+          <i class="fa-solid fa-star"></i>
+          <h3 id="user-xp">0 XP</h3>
+          <p>Total Points</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Milestones & Badges Section -->
+<section class="milestones-section">
+  <h2><i class="fa-solid fa-trophy"></i> Subject Mastery & Badges</h2>
+  
+  <div class="badges-grid">
+
+    <!-- BM Badge -->
+    <div class="badge-card locked" id="badge-bm">
+      <div class="badge-icon"><i class="fa-solid fa-book-open"></i></div>
+      <h4>BM Master</h4>
+      <p>Complete 5 BM Tips</p>
+      <div class="badge-progress-bar">
+        <div class="badge-progress" id="progress-bm" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Math Badge -->
+    <div class="badge-card locked" id="badge-math">
+      <div class="badge-icon"><i class="fa-solid fa-calculator"></i></div>
+      <h4>Math Wizard</h4>
+      <p>Complete 5 Math Tips</p>
+      <div class="badge-progress-bar">
+        <div class="badge-progress" id="progress-math" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Science Badge -->
+    <div class="badge-card locked" id="badge-science">
+      <div class="badge-icon"><i class="fa-solid fa-flask"></i></div>
+      <h4>Science Whiz</h4>
+      <p>Complete 5 Science Tips</p>
+      <div class="badge-progress-bar">
+        <div class="badge-progress" id="progress-science" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- English Badge -->
+    <div class="badge-card locked" id="badge-english">
+      <div class="badge-icon"><i class="fa-solid fa-pen-nib"></i></div>
+      <h4>Word Smith</h4>
+      <p>Complete 5 English Tips</p>
+      <div class="badge-progress-bar">
+        <div class="badge-progress" id="progress-english" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Quiz Champion Badge -->
+    <div class="badge-card locked" id="badge-quizzes">
+      <div class="badge-icon"><i class="fa-solid fa-trophy"></i></div>
+      <h4>Quiz Champion</h4>
+      <p>Complete 5 Quizzes</p>
+      <div class="badge-progress-bar">
+        <div class="badge-progress" id="progress-quizzes" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Streak Badge -->
+    <div class="badge-card locked" id="badge-streak">
+      <div class="badge-icon"><i class="fa-solid fa-fire"></i></div>
+      <h4>On Fire!</h4>
+      <p>Reach a 7-Day Streak</p>
+      <div class="badge-progress-bar">
+        <div class="badge-progress" id="progress-streak" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- XP Badge -->
+    <div class="badge-card locked" id="badge-xp">
+      <div class="badge-icon"><i class="fa-solid fa-star"></i></div>
+      <h4>XP Legend</h4>
+      <p>Reach 100 Total XP</p>
+      <div class="badge-progress-bar">
+        <div class="badge-progress" id="progress-xp" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- Perfectionist Badge -->
+    <div class="badge-card locked" id="badge-perfection">
+      <div class="badge-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <h4>Perfectionist</h4>
+      <p>Score 100% on a Quiz</p>
+      <div class="badge-progress-bar">
+        <div class="badge-progress" id="progress-perfection" style="width: 0%;"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 TipsToLearn. Empowering students every day.</p>
+  </footer>
+
+
+
+  <!-- Streak Lost Modal -->
+  <div id="streak-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-icon">💔</div>
+      <h2>Streak Lost!</h2>
+      <p>You missed a day, so your streak reset to 1. Don't worry, start fresh today!</p>
+      <button id="close-modal-btn" class="modal-btn">Let's Go!</button>
+    </div>
+  </div>
+
+  <!-- Celebration Modal -->
+  <div id="celebration-modal" class="modal-overlay hidden">
+    <div class="modal-card celebration-card">
+      <div class="firework-icon">🔥</div>
+      <h2>Streak Milestone Unlocked!</h2>
+      <p id="celebration-text">You reached a 7-Day Streak! Keep up the momentum!</p>
+      <button onclick="closeCelebrationModal()" class="modal-btn">Awesome!</button>
+    </div>
+  </div>
+
+  <!-- Floating Pomodoro Widget -->
+  <div class="pomodoro-widget" id="pomodoro-widget">
+    <button class="widget-toggle" onclick="toggleWidget()">
+      <i class="fa-solid fa-stopwatch"></i>
+      <span id="widget-min-display">25:00</span>
+    </button>
+
+    <div class="widget-card hidden" id="widget-card">
+      <div class="pomodoro-header">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span>Focus Timer</span>
+      </div>
+      <div class="timer-display" id="timer-display">25:00</div>
+      <div class="timer-controls">
+        <button id="start-btn" onclick="startTimer()">Start</button>
+        <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
+        <button id="reset-btn" onclick="resetTimer()">Reset</button>
+      </div>
+      <p class="timer-status" id="timer-status">Ready to study?</p>
+    </div>
+  </div>
+  <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
+    <audio id="focus-audio" preload="metadata"></audio>
+
+    <!-- Minimized Circle Button -->
+    <button class="widget-circle-btn" aria-label="Open Music Player">
+      <i class="fa-solid fa-compact-disc"></i>
+    </button>
+
+    <!-- Expanded Card -->
+    <div class="music-card-content">
+      <div class="widget-top-bar">
+        <button class="minimize-btn" onclick="toggleWidgetExpand(event)" title="Minimize">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="player-main">
+        <div class="disc-icon" id="disc-icon">
+          <i class="fa-solid fa-compact-disc"></i>
+        </div>
+        <div class="track-details">
+          <span class="track-title" id="current-title">Lo-Fi Rain & Beats</span>
+          <span class="track-status" id="audio-status">Paused</span>
+        </div>
+
+        <div class="controls-row">
+          <button class="control-btn" onclick="prevTrack(event)"><i class="fa-solid fa-backward-step"></i></button>
+          <button class="play-btn" onclick="toggleCustomAudio(event)" id="custom-play-btn">
+            <i class="fa-solid fa-play" id="play-icon"></i>
+          </button>
+          <button class="control-btn" onclick="nextTrack(event)"><i class="fa-solid fa-forward-step"></i></button>
+        </div>
+      </div>
+
+      <!-- Playlist Header -->
+      <div class="playlist-header" onclick="togglePlaylist(event)">
+        <span><i class="fa-solid fa-list-ul"></i> STUDY PLAYLIST</span>
+        <button class="collapse-btn"><i class="fa-solid fa-chevron-up" id="collapse-icon"></i></button>
+      </div>
+
+      <!-- Playlist Items Container -->
+      <div class="playlist-scroll-area" id="playlist-container">
+        <ul class="playlist">
+          <li class="playlist-item active" onclick="playSelectedTrack(0, event)">
+            <span><i class="fa-solid fa-cloud-rain"></i> Zelda Lullaby</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(1, event)">
+            <span><i class="fa-solid fa-coffee"></i> Saria's Song</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(2, event)">
+            <span><i class="fa-solid fa-brain"></i> Song Of Healing</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(3, event)">
+            <span><i class="fa-solid fa-fire"></i> Great Fairy Fountain</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(4, event)">
+            <span><i class="fa-solid fa-tree"></i> Mipha Theme</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

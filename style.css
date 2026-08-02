@@ -1,0 +1,767 @@
+/* ==========================================
+   1. GLOBAL VARIABLES & RESETS
+   ========================================== */
+:root {
+  --bg-main: #FAF7F2;
+  --text-dark: #2B2D42;
+  --text-muted: #6C757D;
+  --accent-yellow: #F5C842;
+  --accent-yellow-hover: #e5bd38;
+  --card-bg: #FFFFFF;
+  --border-light: #f0efe8;
+  --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background-color: var(--bg-main);
+  font-family: 'Quicksand', system-ui, sans-serif;
+  color: var(--text-dark);
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================
+   2. HEADER & NAVIGATION
+   ========================================== */
+
+
+.intro {
+  display: flex;
+  justify-content: center; /* Horizontally centers children */
+  width: 100%;
+}
+
+.vid-intro {
+  max-width: 960px;
+  width: 100%; /* Ensures it fills available space up to 960px */
+  height: 200px;
+  border-radius: 16px; /* Optional: matches your UI's rounded corners */
+  overflow: hidden;    /* Clips the image to match the rounded corners */
+}
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* Fills the container without stretching or distorting */
+  object-position: top; /* Keeps the focus in the center of the image */
+  display: block;      /* Removes extra bottom spacing caused by default inline images */
+}
+
+   .navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 28px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  max-width: 1100px;
+  margin: 20px auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+.logo span {
+  cursor: pointer;
+  color: #000000;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #1e293b;
+}
+
+.nav-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.nav-btn {
+  text-decoration: none;
+  color: #334155;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 18px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #0f172a;
+}
+
+/* Active Page Highlight */
+.nav-btn.active {
+  background-color: #facc15;
+  color: #1e293b;
+}
+.streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #fff3cd;
+  border: 1.5px solid #ffeeba;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  color: #856404;
+  font-size: 0.95rem;
+}
+
+.streak-icon {
+  color: #ff6b00;
+}
+/* Left Sidebar Navigation (Vertical Fixed) */
+@media (max-width: 768px) {
+  /* Dock the navbar to the top-left edge */
+  .navbar {
+    position: fixed;
+    top: 20px;
+    left: 12px;
+    width: 220px; /* Adjust sidebar width as needed */
+    height: calc(100vh - 40px); /* Full height minus margins */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 16px;
+    margin: 0;
+    z-index: 100;
+    box-sizing: border-box;
+    overflow-y: auto; /* Scrollable if items overflow */
+  }
+
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .nav-btn {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .streak-badge {
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Shift the rest of the page content so the sidebar doesn't cover it */
+  body {
+    padding-left: 240px; /* Should be slightly wider than the sidebar width */
+  }
+}
+/* ==========================================
+   3. MAIN MENU CARDS
+   ========================================== */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 960px;
+  margin: 40px auto;
+}
+
+.menu-card {
+  background-color: var(--card-bg);
+  border-radius: 20px;
+  padding: 30px 24px;
+  text-align: center;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.icon-wrapper {
+  width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.tips-card .icon-wrapper { background-color: #fef3c7; color: #d97706; }
+.learn-card .icon-wrapper { background-color: #e0e7ff; color: #4f46e5; }
+.quiz-card .icon-wrapper  { background-color: #dcfce7; color: #16a34a; }
+
+.menu-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.menu-card p {
+  margin: 0 0 20px 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  flex-grow: 1;
+}
+
+.menu-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--accent-yellow);
+  color: var(--text-dark);
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+.menu-btn:hover {
+  background-color: var(--accent-yellow-hover);
+}
+
+/* Responsive Grid */
+@media (max-width: 768px) {
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================
+   4. DAILY TIP & STATS SECTION
+   ========================================== */
+.daily-tip-box {
+  background-color: #FFFDF5;
+  border: 1.5px solid #FCE49D;
+  border-radius: 20px;
+  padding: 20px 24px;
+  max-width: 960px;
+  margin: 25px auto 0;
+}
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #C68A00;
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+}
+
+.tip-content {
+  margin: 0;
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.stats-section {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.stats-section h2 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+.stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  padding: 20px 30px;
+  border-radius: 16px;
+  min-width: 150px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.stat-card i {
+  font-size: 1.5rem;
+  color: var(--accent-yellow);
+  margin-bottom: 8px;
+}
+
+.stat-card h3 {
+  margin: 4px 0;
+  font-size: 1.2rem;
+}
+
+.stat-card p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================
+   5. BADGES & MILESTONES
+   ========================================== */
+.milestones-section {
+  max-width: 960px;
+  margin: 40px auto;
+}
+
+.milestones-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.milestones-section h2 i {
+  color: var(--accent-yellow);
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.badge-card {
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.badge-card.locked {
+  opacity: 0.55;
+  filter: grayscale(80%);
+}
+
+.badge-card.unlocked {
+  opacity: 1;
+  filter: grayscale(0%);
+  border: 2px solid var(--accent-yellow);
+  box-shadow: 0 6px 20px rgba(243, 202, 64, 0.25);
+  transform: translateY(-2px);
+}
+
+.badge-icon {
+  font-size: 2rem;
+  color: var(--accent-yellow);
+  margin-bottom: 8px;
+}
+
+.badge-card h4 {
+  margin: 6px 0 4px 0;
+  font-size: 1.1rem;
+}
+
+.badge-card p {
+  margin: 0 0 12px 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.badge-progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #f4f1ea;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.badge-progress {
+  height: 100%;
+  background-color: var(--accent-yellow);
+  border-radius: 10px;
+  transition: width 0.4s ease;
+}
+
+/* ==========================================
+   6. MODALS & FLOATING WIDGETS
+   ========================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background-color: var(--card-bg);
+  padding: 28px 24px;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 340px;
+  width: 85%;
+  box-shadow: var(--shadow-md);
+}
+
+.modal-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+
+.modal-btn {
+  background-color: var(--accent-yellow);
+  color: var(--text-dark);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1rem;
+}
+
+
+
+/* Pomodoro Floating Widget */
+.pomodoro-widget {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 1000;
+}
+
+.widget-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--card-bg);
+  color: var(--text-dark);
+  border: 1.5px solid #e2e8f0;
+  padding: 10px 18px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.widget-toggle i {
+  color: var(--accent-yellow);
+}
+
+.widget-card {
+  position: absolute;
+  bottom: 55px;
+  left: 0;
+  width: 260px;
+  background-color: var(--card-bg);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  text-align: center;
+}
+
+.timer-display {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 8px 0;
+  font-family: monospace;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.timer-controls button {
+  background-color: var(--accent-yellow);
+  color: var(--text-dark);
+  border: none;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#reset-btn {
+  background-color: #f4f1ea;
+  color: var(--text-muted);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px 0 10px;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+/* Animations */
+.celebration-card { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.firework-icon { font-size: 3.5rem; animation: pulse 1s infinite alternate; }
+
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* Base Container (Anchored at Bottom-Right Corner) */
+.mp3-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  width: 280px;
+  max-height: 420px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  
+  /* Smooth Morphing Animation Setup */
+  transform-origin: bottom right;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 0.35s ease,
+              background 0.35s ease,
+              box-shadow 0.35s ease;
+  overflow: hidden;
+}
+
+/* --- MINIMIZED STATE (Bottom-Right Circle) --- */
+.mp3-widget.minimized {
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+  border: none;
+}
+
+.mp3-widget.minimized:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.65);
+}
+
+/* Toggle Circle Icon */
+.widget-circle-btn {
+  display: none;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.mp3-widget.minimized .widget-circle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Spinning Disc inside minimized button when music plays */
+.mp3-widget.minimized .widget-circle-btn i {
+  animation: spin 3s linear infinite;
+}
+
+/* Hide card inner content when circle */
+.mp3-widget.minimized .music-card-content {
+  opacity: 0;
+  pointer-events: none;
+  display: none;
+}
+
+/* --- EXPANDED CARD INNER CONTENT --- */
+.music-card-content {
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.widget-top-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 2px;
+}
+
+.minimize-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 50%;
+  transition: color 0.2s;
+}
+
+.minimize-btn:hover {
+  color: #1e293b;
+}
+
+.player-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.disc-icon {
+  width: 44px;
+  height: 44px;
+  background-color: #e0e7ff;
+  color: #6366f1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.disc-icon.playing i {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.track-title { font-weight: 700; font-size: 0.9rem; color: #1e293b; display: block; }
+.track-status { font-size: 0.75rem; color: #64748b; display: block; }
+
+.controls-row { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+.control-btn { background: none; border: none; color: #64748b; font-size: 1rem; cursor: pointer; }
+
+.play-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: #6366f1;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Playlist Header */
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  user-select: none;
+}
+.playlist-header:hover { color: #6366f1; }
+
+.collapse-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Scrollable Playlist Area */
+.playlist-scroll-area {
+  max-height: 180px;
+  opacity: 1;
+  overflow-y: auto;
+  margin-top: 8px;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+}
+
+/* Collapsed State */
+.playlist-scroll-area.collapsed {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  margin-top: 0 !important;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* List Items */
+.playlist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #475569;
+  background-color: #f8fafc;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.playlist-item:hover,
+.playlist-item.active {
+  background-color: #eef2ff;
+  color: #6366f1;
+}
+
+.playlist-item.active {
+  border-left: 3px solid #6366f1;
+}

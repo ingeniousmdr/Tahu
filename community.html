@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tahu - Student Community</title>
+  <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+  
+  <!-- Google Font & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Supabase JS Client Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    body {
+      background-color: #fdfbf7;
+      color: #334155;
+      margin: 0;
+      padding: 24px;
+    }
+
+    .community-container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* Header & Create Post Trigger */
+    .community-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .community-header h2 {
+      font-size: 1.6rem;
+      margin: 0;
+      color: #1e293b;
+    }
+
+    .btn-primary {
+      background-color: #f59e0b;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #d97706;
+      transform: translateY(-1px);
+    }
+
+    /* Create Post Card / Form */
+    .create-post-card {
+      background: #ffffff;
+      border: 1px solid #f1f5f9;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .create-post-card h3 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      color: #334155;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: #f59e0b;
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* Feed & Post Cards */
+    .posts-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .post-card {
+      background: #ffffff;
+      border: 1px solid #f1f5f9;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      gap: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      transition: transform 0.15s ease;
+    }
+
+    .post-card:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Upvote Sidebar */
+    .vote-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .vote-btn {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      color: #64748b;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .vote-btn:hover {
+      background: #fef3c7;
+      color: #d97706;
+      border-color: #fde68a;
+    }
+
+    .vote-btn.voted {
+      background: #fef3c7;
+      color: #d97706;
+      border-color: #f59e0b;
+    }
+
+    .vote-count {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #334155;
+    }
+
+    /* Main Post Details */
+    .post-main {
+      flex: 1;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .badge-tag {
+      background: #fef3c7;
+      color: #b45309;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+    }
+
+    .post-author {
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .delete-btn:hover {
+      color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .post-title {
+      margin: 0 0 6px 0;
+      font-size: 1.15rem;
+      color: #1e293b;
+    }
+
+    .post-body {
+      margin: 0 0 12px 0;
+      font-size: 0.95rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .comment-toggle-btn {
+      background: none;
+      border: none;
+      color: #64748b;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .comment-toggle-btn:hover {
+      background: #f1f5f9;
+      color: #f59e0b;
+    }
+
+    /* Comments Section */
+    .comments-section {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+      display: none;
+    }
+
+    .comments-section.open {
+      display: block;
+    }
+
+    .comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .comment-item {
+      background: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .comment-author {
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .comment-text {
+      margin: 0;
+      color: #475569;
+    }
+
+    .comment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .comment-form-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .comment-form input {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #94a3b8;
+    }
+
+    /* Custom Toast Popup */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #ffffff;
+      color: #334155;
+      border-left: 5px solid #f59e0b;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+
+    .toast i {
+      color: #f59e0b;
+      font-size: 1.2rem;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Custom Confirmation Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 24px;
+      width: 90%;
+      max-width: 380px;
+      text-align: center;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.show .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-icon {
+      width: 48px;
+      height: 48px;
+      background: #fef2f2;
+      color: #ef4444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 1.25rem;
+    }
+
+    .modal-box h3 {
+      margin: 0 0 8px;
+      color: #1e293b;
+      font-size: 1.2rem;
+    }
+
+    .modal-box p {
+      margin: 0 0 20px;
+      color: #64748b;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-cancel {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+
+    .btn-cancel:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-delete {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    .btn-delete:hover {
+      background: #dc2626;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <img src="icon.png" alt="Logo" class="nav-logo">
+        <a href="index.html"><span>Tahu</span></a>
+      </div>
+      <div class="nav-links">
+        <div class="streak-badge">
+          <i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count">1 Day</span>
+        </div>
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="tips.html" class="nav-btn">Tips</a>
+        <a href="learn.html" class="nav-btn">Aid</a>
+        <a href="quiz.html" class="nav-btn">Quiz</a>
+        <a href="community.html" class="nav-btn active">Community</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="community-container">
+    <div class="community-header">
+      <h2><i class="fa-solid fa-comments"></i> Student Discussions</h2>
+      <button class="btn-primary" onclick="toggleForm()">+ New Post</button>
+    </div>
+
+    <!-- Create Post Form -->
+    <div class="create-post-card" id="post-form-card" style="display: none;">
+      <h3>Share a Study Tip or Question</h3>
+      <form id="create-post-form">
+        <div class="form-group">
+          <input type="text" id="post-username" class="form-control" placeholder="Your Name or Alias" required>
+        </div>
+        <div class="form-group">
+          <select id="post-category" class="form-control" required>
+            <option value="General">General Study Tip</option>
+            <option value="BM">Bahasa Melayu</option>
+            <option value="Math">Mathematics</option>
+            <option value="Science">Science</option>
+            <option value="English">English</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input type="text" id="post-title" class="form-control" placeholder="Post Title" required>
+        </div>
+        <div class="form-group">
+          <textarea id="post-content" class="form-control" placeholder="What's on your mind?" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Publish Post</button>
+      </form>
+    </div>
+
+    <!-- Feed Container -->
+    <div class="posts-feed" id="posts-feed">
+      <div class="empty-state">Loading discussions...</div>
+    </div>
+  </div>
+
+  <!-- Custom Delete Confirmation Modal -->
+  <div id="confirm-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-icon">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3>Delete Confirmation</h3>
+      <p>Are you sure you want to proceed? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeConfirmModal(false)">Cancel</button>
+        <button class="btn-delete" onclick="closeConfirmModal(true)">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Toast Notification Container -->
+  <div id="toast-notification" class="toast">
+    <i class="fa-solid fa-circle-info"></i>
+    <span id="toast-message">Notification message here</span>
+  </div>
+
+  <script>
+    // 1. Initialize Supabase Client
+    const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
+    
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Toast Notification Helper
+    function showToast(message) {
+      const toast = document.getElementById("toast-notification");
+      const toastMessage = document.getElementById("toast-message");
+
+      toastMessage.textContent = message;
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000);
+    }
+
+    // 2. Load Posts from Database with Fallback Handling
+    async function loadPosts() {
+      const feedEl = document.getElementById("posts-feed");
+      const upvotedPosts = JSON.parse(localStorage.getItem('upvotedPosts') || '[]');
+      
+      // Try fetching posts along with their nested comments
+      let { data: posts, error } = await db
+        .from("posts")
+        .select("*, comments(*)")
+        .order("created_at", { ascending: false });
+
+      // Fallback: If relational query fails (e.g., table missing), fetch posts directly
+      if (error) {
+        console.warn("Relational query failed, attempting to load posts without comments...", error);
+        const fallback = await db.from("posts").select("*").order("created_at", { ascending: false });
+        
+        if (fallback.error) {
+          console.error("Error fetching posts:", fallback.error);
+          feedEl.innerHTML = `<div class="empty-state">Error loading posts. Please try again later.</div>`;
+          return;
+        }
+        posts = fallback.data.map(p => ({ ...p, comments: [] }));
+      }
+
+      if (!posts || posts.length === 0) {
+        feedEl.innerHTML = `<div class="empty-state">No discussions yet. Be the first to share!</div>`;
+        return;
+      }
+
+      feedEl.innerHTML = posts.map(post => {
+        const isVoted = upvotedPosts.includes(post.id);
+        const commentList = post.comments || [];
+        const commentCount = commentList.length;
+
+        const commentsMarkup = commentList.map(c => `
+          <div class="comment-item">
+            <div class="comment-header">
+              <span class="comment-author">${escapeHTML(c.username)}</span>
+              <button class="delete-btn" onclick="deleteComment(${c.id})" title="Delete comment" style="font-size: 0.75rem; padding: 2px 6px;">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+            <p class="comment-text">${escapeHTML(c.content)}</p>
+          </div>
+        `).join('');
+
+        return `
+          <div class="post-card">
+            <div class="vote-box">
+              <button class="vote-btn ${isVoted ? 'voted' : ''}" onclick="upvotePost(${post.id}, ${post.upvotes})">
+                <i class="fa-solid fa-arrow-up"></i>
+              </button>
+              <span class="vote-count" id="vote-count-${post.id}">${post.upvotes}</span>
+            </div>
+            <div class="post-main">
+              <div class="post-meta">
+                <div>
+                  <span class="badge-tag">${escapeHTML(post.category)}</span>
+                  <span class="post-author">• Posted by ${escapeHTML(post.username)}</span>
+                </div>
+                <button class="delete-btn" onclick="deletePost(${post.id})" title="Delete post">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+              <h3 class="post-title">${escapeHTML(post.title)}</h3>
+              <p class="post-body">${escapeHTML(post.content)}</p>
+
+              <!-- Comments Toggle Button -->
+              <button class="comment-toggle-btn" onclick="toggleComments(${post.id})">
+                <i class="fa-regular fa-comment"></i> <span id="comment-count-${post.id}">${commentCount}</span> Comments
+              </button>
+
+              <!-- Comments Container -->
+              <div class="comments-section" id="comments-section-${post.id}">
+                <div class="comments-list" id="comments-list-${post.id}">
+                  ${commentsMarkup.length ? commentsMarkup : '<p style="color: #94a3b8; font-size: 0.85rem; margin: 4px 0 12px;">No comments yet. Be the first!</p>'}
+                </div>
+                <form class="comment-form" onsubmit="submitComment(event, ${post.id})">
+                  <div class="comment-form-row">
+                    <input type="text" class="form-control" id="comment-user-${post.id}" placeholder="Your Name" required />
+                    <input type="text" class="form-control" id="comment-text-${post.id}" placeholder="Write a comment..." required />
+                  </div>
+                  <button type="submit" class="btn-primary" style="padding: 6px 14px; font-size: 0.85rem; align-self: flex-end;">Reply</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Toggle Comments Section Visibility
+    function toggleComments(postId) {
+      const section = document.getElementById(`comments-section-${postId}`);
+      if (section) {
+        section.classList.toggle("open");
+      }
+    }
+
+    // Submit New Comment
+    async function submitComment(event, postId) {
+      event.preventDefault();
+      const usernameInput = document.getElementById(`comment-user-${postId}`);
+      const textInput = document.getElementById(`comment-text-${postId}`);
+
+      const username = usernameInput.value.trim();
+      const content = textInput.value.trim();
+
+      const { error } = await db
+        .from("comments")
+        .insert([{ post_id: postId, username, content }]);
+
+      if (error) {
+        showToast("Failed to post comment: " + error.message);
+        return;
+      }
+
+      showToast("Comment added!");
+      usernameInput.value = "";
+      textInput.value = "";
+      loadPosts();
+    }
+
+    // Delete Handlers
+    let pendingDelete = { id: null, type: null }; // type can be 'post' or 'comment'
+
+    function deletePost(postId) {
+      pendingDelete = { id: postId, type: 'post' };
+      document.querySelector("#confirm-modal h3").textContent = "Delete Post?";
+      document.querySelector("#confirm-modal p").textContent = "Are you sure you want to delete this post? This action cannot be undone.";
+      document.getElementById("confirm-modal").classList.add("show");
+    }
+
+    function deleteComment(commentId) {
+      pendingDelete = { id: commentId, type: 'comment' };
+      document.querySelector("#confirm-modal h3").textContent = "Delete Comment?";
+      document.querySelector("#confirm-modal p").textContent = "Are you sure you want to delete this comment?";
+      document.getElementById("confirm-modal").classList.add("show");
+    }
+
+    async function closeConfirmModal(confirmed) {
+      const modal = document.getElementById("confirm-modal");
+      modal.classList.remove("show");
+
+      if (confirmed && pendingDelete.id !== null) {
+        const { id, type } = pendingDelete;
+        pendingDelete = { id: null, type: null };
+
+        if (type === 'post') {
+          const { error } = await db.from('posts').delete().eq('id', id);
+          if (error) {
+            showToast("Error deleting post: " + error.message);
+          } else {
+            showToast("Post deleted successfully!");
+            loadPosts();
+          }
+        } else if (type === 'comment') {
+          const { error } = await db.from('comments').delete().eq('id', id);
+          if (error) {
+            showToast("Error deleting comment: " + error.message);
+          } else {
+            showToast("Comment deleted!");
+            loadPosts();
+          }
+        }
+      } else {
+        pendingDelete = { id: null, type: null };
+      }
+    }
+
+    // 3. Create a New Post
+    document.getElementById("create-post-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById("post-username").value.trim();
+      const category = document.getElementById("post-category").value;
+      const title = document.getElementById("post-title").value.trim();
+      const content = document.getElementById("post-content").value.trim();
+
+      const { error } = await db
+        .from("posts")
+        .insert([{ username, category, title, content, upvotes: 0 }]);
+
+      if (error) {
+        showToast("Failed to submit post: " + error.message);
+        return;
+      }
+
+      document.getElementById("create-post-form").reset();
+      toggleForm();
+      showToast("Post published! +5 XP");
+      
+      if (typeof addXP === "function") {
+        addXP(5);
+      }
+
+      loadPosts();
+    });
+
+    // 4. Upvote Handler
+    async function upvotePost(id, currentVotes) {
+      const upvotedPosts = JSON.parse(localStorage.getItem('upvotedPosts') || '[]');
+
+      if (upvotedPosts.includes(id)) {
+        showToast("You have already upvoted this post!");
+        return;
+      }
+
+      const newUpvotes = currentVotes + 1;
+      const voteEl = document.getElementById(`vote-count-${id}`);
+      if (voteEl) voteEl.textContent = newUpvotes;
+
+      const { error } = await db
+        .from("posts")
+        .update({ upvotes: newUpvotes })
+        .eq("id", id);
+
+      if (error) {
+        console.error("Error updating upvote:", error);
+        loadPosts();
+      } else {
+        upvotedPosts.push(id);
+        localStorage.setItem('upvotedPosts', JSON.stringify(upvotedPosts));
+        loadPosts();
+      }
+    }
+
+    // Helpers
+    function toggleForm() {
+      const formCard = document.getElementById("post-form-card");
+      formCard.style.display = formCard.style.display === "none" ? "block" : "none";
+    }
+
+    function escapeHTML(str) {
+      return (str || '').replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+
+    document.addEventListener("DOMContentLoaded", loadPosts);
+  </script>
+  <script src="script.js"></script>
+
+  <!-- Lo-Fi Music Widget -->
+  <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
+    <audio id="focus-audio" preload="metadata"></audio>
+
+    <!-- Minimized Circle Button -->
+    <button class="widget-circle-btn" aria-label="Open Music Player">
+      <i class="fa-solid fa-compact-disc"></i>
+    </button>
+
+    <!-- Expanded Card -->
+    <div class="music-card-content">
+      <div class="widget-top-bar">
+        <button class="minimize-btn" onclick="toggleWidgetExpand(event)" title="Minimize">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="player-main">
+        <div class="disc-icon" id="disc-icon">
+          <i class="fa-solid fa-compact-disc"></i>
+        </div>
+        <div class="track-details">
+          <span class="track-title" id="current-title">Lo-Fi Rain & Beats</span>
+          <span class="track-status" id="audio-status">Paused</span>
+        </div>
+
+        <div class="controls-row">
+          <button class="control-btn" onclick="prevTrack(event)"><i class="fa-solid fa-backward-step"></i></button>
+          <button class="play-btn" onclick="toggleCustomAudio(event)" id="custom-play-btn">
+            <i class="fa-solid fa-play" id="play-icon"></i>
+          </button>
+          <button class="control-btn" onclick="nextTrack(event)"><i class="fa-solid fa-forward-step"></i></button>
+        </div>
+      </div>
+
+      <!-- Playlist Header -->
+      <div class="playlist-header" onclick="togglePlaylist(event)">
+        <span><i class="fa-solid fa-list-ul"></i> STUDY PLAYLIST</span>
+        <button class="collapse-btn"><i class="fa-solid fa-chevron-up" id="collapse-icon"></i></button>
+      </div>
+
+      <!-- Playlist Items Container -->
+      <div class="playlist-scroll-area" id="playlist-container">
+        <ul class="playlist">
+          <li class="playlist-item active" onclick="playSelectedTrack(0, event)">
+            <span><i class="fa-solid fa-cloud-rain"></i> Zelda Lullaby</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(1, event)">
+            <span><i class="fa-solid fa-coffee"></i> Saria's Song</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(2, event)">
+            <span><i class="fa-solid fa-brain"></i> Song Of Healing</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(3, event)">
+            <span><i class="fa-solid fa-fire"></i> Great Fairy Fountain</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(4, event)">
+            <span><i class="fa-solid fa-tree"></i> Mipha Theme</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

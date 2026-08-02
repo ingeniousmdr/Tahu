@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tahu - Science Tips</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="subject.css" />
+    <link rel="icon" type="image/png" href="icon.png" />
+    <script
+      src="https://kit.fontawesome.com/c8c917a1e5.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js"></script>
+  </head>
+<body class="theme-science">
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <img src="icon.png" alt="Logo" class="nav-logo">
+        <a href="index.html"><span>Tahu</span></a>
+      </div>
+      <div class="nav-links">
+        <div class="streak-badge">
+          <i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count">1 Day</span>
+        </div>
+        
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="tips.html" class="nav-btn active">Tips</a>
+        <a href="learn.html" class="nav-btn">Aid</a>
+        <!-- Add class "active" to the button corresponding to the current page -->
+        <a href="quiz.html" class="nav-btn ">Quiz</a>
+        <a href="community.html" class="nav-btn">Community</a>
+      </div>
+    </nav>
+  </header>
+  <main>
+
+<!-- SCIENCE TIP CARD -->
+<div class="tip-card science-card">
+  <div class="card-header-flex">
+    <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
+    <span class="xp-tag">+10 XP</span>
+  </div>
+
+  <h3 id="science-tip-title">Photosynthesis Equation Trick</h3>
+
+  <!-- Interactive Memory Prompt -->
+  <div class="interactive-prompt">
+    <p class="prompt-question"><strong>Memory Trick:</strong> How do you easily remember what plants need for photosynthesis?</p>
+    
+    <!-- Hidden Answer/Mnemonic -->
+    <div id="tip-answer-box" class="tip-answer hidden">
+      <div class="mnemonic-box">
+        <span class="highlight">C.W.S</span> ➔ <strong>C</strong>arbon Dioxide + <strong>W</strong>ater + <strong>S</strong>unlight
+      </div>
+      <p class="explanation">Formula: <code>CO₂ + H₂O + Light ➔ Glucose + O₂</code></p>
+    </div>
+
+    <!-- Interactive Reveal Button -->
+    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+    </button>
+  </div>
+
+  <!-- Footer Action -->
+  <div class="card-footer">
+    <button 
+      class="complete-btn" 
+      data-tip-id="science_tip_photosynthesis" 
+      onclick="markTipComplete('science', 'science_tip_photosynthesis', this)">
+      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+    </button>
+  </div>
+</div>
+
+<!-- SCIENCE TIP 2: PERIODIC TABLE GROUPS -->
+<div class="tip-card science-card">
+  <div class="card-header-flex">
+    <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
+    <span class="xp-tag">+10 XP</span>
+  </div>
+
+  <h3>Groups vs. Periods Trick</h3>
+
+  <div class="interactive-prompt">
+    <p class="prompt-question"><strong>Memory Trick:</strong> How do you remember which way Groups and Periods go on the Periodic Table?</p>
+    
+    <div class="tip-answer hidden">
+      <div class="mnemonic-box">
+        <span class="highlight">G.U.P</span> & <span class="highlight">P.H</span>
+      </div>
+      <p class="explanation">
+        <strong>G</strong>roups go <strong>U</strong>p and down (Vertical Columns).<br>
+        <strong>P</strong>eriods go <strong>H</strong>orizontally (Rows across).
+      </p>
+    </div>
+
+    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+    </button>
+  </div>
+
+  <div class="card-footer">
+    <button 
+      class="complete-btn" 
+      data-tip-id="science_tip_periodic_table" 
+      onclick="markTipComplete('science', 'science_tip_periodic_table', this)">
+      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+    </button>
+  </div>
+</div>
+
+<!-- SCIENCE TIP 3: STATES OF MATTER -->
+<div class="tip-card science-card">
+  <div class="card-header-flex">
+    <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
+    <span class="xp-tag">+10 XP</span>
+  </div>
+
+  <h3>Phase Changes (Sublimation & Deposition)</h3>
+
+  <div class="interactive-prompt">
+    <p class="prompt-question"><strong>Memory Trick:</strong> How do you remember the direct skip between Solid and Gas?</p>
+    
+    <div class="tip-answer hidden">
+      <div class="mnemonic-box">
+        <span class="highlight">S.G.S</span> ➔ <strong>S</strong>olid to <strong>G</strong>as = <strong>S</strong>ublimation
+      </div>
+      <p class="explanation">
+        <strong>Sublimation:</strong> Solid ➔ Gas (e.g., Dry Ice).<br>
+        <strong>Deposition:</strong> Gas ➔ Solid (<em>Depositing</em> frost onto cold glass).
+      </p>
+    </div>
+
+    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+    </button>
+  </div>
+
+  <div class="card-footer">
+    <button 
+      class="complete-btn" 
+      data-tip-id="science_tip_states_matter" 
+      onclick="markTipComplete('science', 'science_tip_states_matter', this)">
+      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+    </button>
+  </div>
+</div>
+
+<!-- SCIENCE TIP 4: IONS & CHARGES -->
+<div class="tip-card science-card">
+  <div class="card-header-flex">
+    <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
+    <span class="xp-tag">+10 XP</span>
+  </div>
+
+  <h3>Cations vs. Anions (Charge & Loss/Gain)</h3>
+
+  <div class="interactive-prompt">
+    <p class="prompt-question"><strong>Memory Trick:</strong> How do you remember which ion is positive/negative and whether electrons are lost or gained?</p>
+    
+    <div class="tip-answer hidden">
+      <div class="mnemonic-box">
+        <span class="highlight">CA+ION</span> is <strong>Paws-itive</strong> 🐱 & <span class="highlight">A-N-I-O-N</span> = <strong>A Negative Ion</strong> 🧅
+      </div>
+      <p class="explanation">
+        <strong>Cation (+) :</strong> <u>Ca<strong>t</strong>ion</u> has a <strong>+</strong> sign. Metals <strong>LOSE</strong> electrons to become positive.<br>
+        <strong>Anion (-) :</strong> <u>A <strong>N</strong>egative <strong>I</strong>on</u>. Non-metals <strong>GAIN</strong> electrons to become negative.
+      </p>
+    </div>
+
+    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+    </button>
+  </div>
+
+  <div class="card-footer">
+    <button 
+      class="complete-btn" 
+      data-tip-id="science_tip_ions_charges" 
+      onclick="markTipComplete('science', 'science_tip_ions_charges', this)">
+      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+    </button>
+  </div>
+</div>
+
+
+
+    <!-- Streak Lost Modal -->
+  <div id="streak-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-icon">💔</div>
+      <h2>Streak Lost!</h2>
+      <p>
+        You missed a day, so your streak reset to 1. Don't worry, start fresh
+        today!
+      </p>
+      <button id="close-modal-btn" class="modal-btn">Let's Go!</button>
+    </div>
+  </div>
+  <!-- Translate Toggle Button -->
+  <button id="translate-btn" class="notranslate" translate="no" onclick="toggleLanguage()">
+    🌐 Switch to Malay
+  </button>
+  <!-- External Google Translate Script -->
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!-- Floating Pomodoro Widget -->
+<div class="pomodoro-widget" id="pomodoro-widget">
+  <!-- Widget Header / Toggle Button -->
+  <button class="widget-toggle" onclick="toggleWidget()">
+    <i class="fa-solid fa-stopwatch"></i>
+    <span id="widget-min-display">25:00</span>
+  </button>
+
+  <!-- Expanded Widget Card -->
+  <div class="widget-card hidden" id="widget-card">
+    <div class="pomodoro-header">
+      <i class="fa-solid fa-stopwatch"></i>
+      <span>Focus Timer</span>
+    </div>
+    
+    <div class="timer-display" id="timer-display">25:00</div>
+    
+    <div class="timer-controls">
+      <button id="start-btn" onclick="startTimer()">Start</button>
+      <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
+      <button id="reset-btn" onclick="resetTimer()">Reset</button>
+    </div>
+    
+    <p class="timer-status" id="timer-status">Ready to study?</p>
+  </div>
+</div>
+<script>
+  function toggleTipAnswer(btnElement) {
+  const answerBox = btnElement.previousElementSibling;
+  
+  if (answerBox.classList.contains('hidden')) {
+    answerBox.classList.remove('hidden');
+    btnElement.innerHTML = `<i class="fa-solid fa-eye-slash"></i> Hide Memory Trick`;
+  } else {
+    answerBox.classList.add('hidden');
+    btnElement.innerHTML = `<i class="fa-solid fa-eye"></i> Reveal Memory Trick`;
+  }
+}
+</script>
+  <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
+    <audio id="focus-audio" preload="metadata"></audio>
+
+    <!-- Minimized Circle Button -->
+    <button class="widget-circle-btn" aria-label="Open Music Player">
+      <i class="fa-solid fa-compact-disc"></i>
+    </button>
+
+    <!-- Expanded Card -->
+    <div class="music-card-content">
+      <div class="widget-top-bar">
+        <button class="minimize-btn" onclick="toggleWidgetExpand(event)" title="Minimize">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="player-main">
+        <div class="disc-icon" id="disc-icon">
+          <i class="fa-solid fa-compact-disc"></i>
+        </div>
+        <div class="track-details">
+          <span class="track-title" id="current-title">Lo-Fi Rain & Beats</span>
+          <span class="track-status" id="audio-status">Paused</span>
+        </div>
+
+        <div class="controls-row">
+          <button class="control-btn" onclick="prevTrack(event)"><i class="fa-solid fa-backward-step"></i></button>
+          <button class="play-btn" onclick="toggleCustomAudio(event)" id="custom-play-btn">
+            <i class="fa-solid fa-play" id="play-icon"></i>
+          </button>
+          <button class="control-btn" onclick="nextTrack(event)"><i class="fa-solid fa-forward-step"></i></button>
+        </div>
+      </div>
+
+      <!-- Playlist Header -->
+      <div class="playlist-header" onclick="togglePlaylist(event)">
+        <span><i class="fa-solid fa-list-ul"></i> STUDY PLAYLIST</span>
+        <button class="collapse-btn"><i class="fa-solid fa-chevron-up" id="collapse-icon"></i></button>
+      </div>
+
+      <!-- Playlist Items Container -->
+      <div class="playlist-scroll-area" id="playlist-container">
+        <ul class="playlist">
+          <li class="playlist-item active" onclick="playSelectedTrack(0, event)">
+            <span><i class="fa-solid fa-cloud-rain"></i> Zelda Lullaby</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(1, event)">
+            <span><i class="fa-solid fa-coffee"></i> Saria's Song</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(2, event)">
+            <span><i class="fa-solid fa-brain"></i> Song Of Healing</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(3, event)">
+            <span><i class="fa-solid fa-fire"></i> Great Fairy Fountain</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(4, event)">
+            <span><i class="fa-solid fa-tree"></i> Mipha Theme</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

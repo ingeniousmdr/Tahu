@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tahu - Practice Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+  <!-- FontAwesome & CSS Links -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="quiz.css">
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <img src="icon.png" alt="Logo" class="nav-logo">
+        <a href="index.html"><span>Tahu</span></a>
+      </div>
+      <div class="nav-links">
+        <div class="streak-badge">
+          <i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count">1 Day</span>
+        </div>
+        
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="tips.html" class="nav-btn">Tips</a>
+        <a href="learn.html" class="nav-btn">Aid</a>
+        <!-- Add class "active" to the button corresponding to the current page -->
+        <a href="quiz.html" class="nav-btn active ">Quiz</a>
+        <a href="community.html" class="nav-btn">Community</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="quiz-container">
+
+    <!-- Header -->
+    <header class="quiz-header">
+      <div>
+        <h1>Interactive Practice Quizzes 🧠</h1>
+        <p>Test your knowledge, master key concepts, and earn XP!</p>
+      </div>
+    </header>
+
+    <!-- Subject Filter Tabs -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterQuizzes('all', this)">All Subjects</button>
+      <button class="filter-btn" onclick="filterQuizzes('Mathematics', this)">Mathematics</button>
+      <button class="filter-btn" onclick="filterQuizzes('Science', this)">Science</button>
+      <button class="filter-btn" onclick="filterQuizzes('English', this)">English</button>
+      <button class="filter-btn" onclick="filterQuizzes('Bahasa Melayu', this)">Bahasa Melayu</button>
+    </div>
+
+    <!-- Quiz Selection Grid -->
+    <section class="quiz-grid" id="quiz-grid"></section>
+
+    <!-- Active Quiz Player (Hidden by Default) -->
+    <section id="quiz-player" class="quiz-player-card hidden">
+      <button class="close-player-btn" onclick="closeQuizPlayer()">&times;</button>
+      <h2 id="player-quiz-title">Quiz Title</h2>
+      
+      <div class="progress-bar-container">
+        <div id="quiz-progress" class="progress-bar-fill"></div>
+      </div>
+
+      <!-- Question & Options Container -->
+      <div id="question-box">
+        <p id="question-text" class="question-text">Question goes here?</p>
+        <div id="options-container" class="options-grid"></div>
+      </div>
+
+      <!-- Completion Results Box -->
+      <div id="quiz-results" class="results-box hidden">
+        <i class="fa-solid fa-trophy trophy-icon"></i>
+        <h3>Quiz Completed!</h3>
+        <p id="score-text">You scored 0/0</p>
+        <p class="xp-earned-text">+<span id="earned-xp">0</span> XP Earned!</p>
+        <button class="primary-btn" onclick="closeQuizPlayer()">Back to Quizzes</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global XP & Streak Script -->
+  <script src="script.js"></script>
+
+  <!-- Inline Quiz Logic -->
+  <script>
+    // 12 Quizzes (3 for each of the 4 subjects)
+    const DEFAULT_QUIZZES = [
+      // --- MATHEMATICS ---
+      {
+        id: "math_q1",
+        title: "Algebra & Linear Equations",
+        subject: "Mathematics",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "Solve for x: 2x + 5 = 15", options: ["x = 3", "x = 5", "x = 10", "x = 8"], answer: 1 },
+          { q: "What is the slope (gradient) of y = 4x - 3?", options: ["-3", "4", "3", "1/4"], answer: 1 },
+          { q: "If 3(x - 2) = 12, what is x?", options: ["4", "5", "6", "7"], answer: 2 }
+        ]
+      },
+      {
+        id: "math_q2",
+        title: "Trigonometry Basics (SOH CAH TOA)",
+        subject: "Mathematics",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "In a right triangle, Tan(θ) equals:", options: ["Opposite / Hypotenuse", "Adjacent / Hypotenuse", "Opposite / Adjacent", "Hypotenuse / Opposite"], answer: 2 },
+          { q: "Sin(30°) is equal to:", options: ["0.5", "1", "0.866", "0"], answer: 0 },
+          { q: "Which ratio represents Cos(θ)?", options: ["Opp / Hyp", "Adj / Hyp", "Opp / Adj", "Adj / Opp"], answer: 1 }
+        ]
+      },
+      {
+        id: "math_q3",
+        title: "Quadratic Equations",
+        subject: "Mathematics",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "What are the roots of x² - 9 = 0?", options: ["x = 3 only", "x = 9, -9", "x = 3, -3", "x = 81"], answer: 2 },
+          { q: "In ax² + bx + c = 0, what is the quadratic formula?", options: ["x = -b ± √(b² - 4ac) / 2a", "x = b ± √(b² - 4ac) / a", "x = -b ± √(4ac) / 2a", "x = -b / 2a"], answer: 0 },
+          { q: "Expand (x + 3)(x + 2):", options: ["x² + 5x + 6", "x² + 6x + 5", "x² + 5x + 5", "x² + 6"], answer: 0 }
+        ]
+      },
+
+      // --- SCIENCE ---
+      {
+        id: "sci_q1",
+        title: "Photosynthesis & Plant Biology",
+        subject: "Science",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "What gas do plants absorb during photosynthesis?", options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], answer: 1 },
+          { q: "What pigment gives plants their green color?", options: ["Melanin", "Carotene", "Chlorophyll", "Hemoglobin"], answer: 2 },
+          { q: "What product of photosynthesis is stored as energy for the plant?", options: ["Glucose", "Carbon Dioxide", "Water", "Salt"], answer: 0 }
+        ]
+      },
+      {
+        id: "sci_q2",
+        title: "Atomic Structure & Ions",
+        subject: "Science",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "What subatomic particle has a negative charge?", options: ["Proton", "Neutron", "Electron", "Nucleus"], answer: 2 },
+          { q: "A positive ion (Cation) is formed when an atom:", options: ["Gains electrons", "Loses electrons", "Gains protons", "Loses neutrons"], answer: 1 },
+          { q: "What is the charge of an Anion?", options: ["Positive", "Negative", "Neutral", "Double Positive"], answer: 1 }
+        ]
+      },
+      {
+        id: "sci_q3",
+        title: "States of Matter & Phase Changes",
+        subject: "Science",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "What is the process of a solid turning directly into a gas?", options: ["Evaporation", "Sublimation", "Condensation", "Freezing"], answer: 1 },
+          { q: "Which state of matter has a fixed volume but no fixed shape?", options: ["Solid", "Liquid", "Gas", "Plasma"], answer: 1 },
+          { q: "Gas turning into a liquid is called:", options: ["Melting", "Sublimation", "Condensation", "Deposition"], answer: 2 }
+        ]
+      },
+
+      // --- ENGLISH ---
+      {
+        id: "eng_q1",
+        title: "Grammar & Active/Passive Voice",
+        subject: "English",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "Which sentence is written in the Passive Voice?", options: ["The cat chased the mouse.", "The mouse was chased by the cat.", "She is writing an essay.", "They will play football."], answer: 1 },
+          { q: "Identify the conjunction in: 'I wanted to go, but it rained.'", options: ["wanted", "go", "but", "it"], answer: 2 },
+          { q: "What does FANBOYS stand for in grammar?", options: ["Action Verbs", "Coordinating Conjunctions", "Nouns", "Adverbs"], answer: 1 }
+        ]
+      },
+      {
+        id: "eng_q2",
+        title: "Idioms & Vocabulary Challenge",
+        subject: "English",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "What does 'Bite the bullet' mean?", options: ["To eat fast", "To face a tough situation bravely", "To get angry", "To shot a target"], answer: 1 },
+          { q: "Choose the synonym for 'Meticulous':", options: ["Careless", "Thorough & Careful", "Lazy", "Quick"], answer: 1 },
+          { q: "What does 'Piece of cake' signify?", options: ["A difficult task", "Something very easy", "A party food", "A birthday gift"], answer: 1 }
+        ]
+      },
+      {
+        id: "eng_q3",
+        title: "Subject-Verb Agreement",
+        subject: "English",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "Neither of the students _____ ready for the test.", options: ["are", "is", "were", "be"], answer: 1 },
+          { q: "The list of items _____ on the table.", options: ["is", "are", "were", "have"], answer: 0 },
+          { q: "Either John or his friends _____ coming today.", options: ["is", "are", "was", "has"], answer: 1 }
+        ]
+      },
+
+      // --- BAHASA MELAYU ---
+      {
+        id: "bm_q1",
+        title: "Penanda Wacana Challenge",
+        subject: "Bahasa Melayu",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "Apakah penanda wacana yang sesuai untuk menunjukkan kesan/akibat?", options: ["Oleh itu", "Contohnya", "Selain itu", "Sementelahan"], answer: 0 },
+          { q: "Pilih penanda wacana aras tinggi yang seerti dengan 'Selain itu':", options: ["Di samping itu", "Natijahnya", "Tamsilnya", "Impaknya"], answer: 0 },
+          { q: "Penanda wacana 'Tamsilnya' digunakan untuk:", options: ["Memberi contoh", "Menunjukkan penutup", "Menunjukkan sebab", "Menunjukkan perbandingan"], answer: 0 }
+        ]
+      },
+      {
+        id: "bm_q2",
+        title: "Tatabahasa & Imbuhan SPM",
+        subject: "Bahasa Melayu",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "Pilih kata ganda yang betul bagi menggambarkan jumlah yang banyak:", options: ["Murid-murid", "Sayur-sayur", "Batu-batu", "Kanak-kanak"], answer: 0 },
+          { q: "Apakah imbuhan yang betul bagi kata dasar 'tari' untuk menunjukkan pembuat?", options: ["Menari", "Penari", "Tarian", "Ditari"], answer: 1 },
+          { q: "Ayat manakah yang menggunakan Kata Kerja Transitif dengan betul?", options: ["Ali membaca buku.", "Ali membaca di bilik.", "Ali berjalan cepat.", "Ali tidur awal."], answer: 0 }
+        ]
+      },
+      {
+        id: "bm_q3",
+        title: "Peribahasa Popular SPM",
+        subject: "Bahasa Melayu",
+        author: "TipsToLearn Official",
+        questions: [
+          { q: "Maksud peribahasa 'Bagai aur dengan tebing':", options: ["Saling bekerjasama", "Saling berbalah", "Sangat sombong", "Sangat malas"], answer: 0 },
+          { q: "Apakah peribahasa yang bermaksud 'usaha yang bersungguh-sungguh akan membawa kejayaan'?", options: ["Di mana ada kemahuan, di situ ada jalan", "Bagai mencurah air ke daun keladi", "Melentur buluh biarlah dari rebungnya", "Seperti katak di bawah tempurung"], answer: 0 },
+          { q: "Peribahasa 'Melentur buluh biarlah dari rebungnya' berkaitan dengan:", options: ["Mendidik anak dari kecil", "Berhemat sewaktu berbelanja", "Menjaga kebersihan persekitaran", "Menghormati orang tua"], answer: 0 }
+        ]
+      }
+    ];
+
+    let activeFilter = 'all';
+    let currentQuiz = null;
+    let currentQuestionIdx = 0;
+    let userScore = 0;
+
+    document.addEventListener("DOMContentLoaded", renderQuizList);
+
+    function getStoredQuizzes() {
+      const custom = JSON.parse(localStorage.getItem("custom_quizzes") || "[]");
+      return [...DEFAULT_QUIZZES, ...custom];
+    }
+
+    function filterQuizzes(subject, btnElement) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+      activeFilter = subject;
+      renderQuizList();
+    }
+
+    function renderQuizList() {
+      const grid = document.getElementById("quiz-grid");
+      const quizzes = getStoredQuizzes();
+      const completedQuizzes = JSON.parse(localStorage.getItem("completedQuizzes") || "[]");
+
+      const filtered = quizzes.filter(q => activeFilter === 'all' || q.subject === activeFilter);
+
+      grid.innerHTML = filtered.map((quiz) => {
+        const isCompleted = completedQuizzes.includes(quiz.id);
+        const btnText = isCompleted ? "Retake Quiz" : "Start Quiz";
+        const btnIcon = isCompleted ? "fa-rotate-right" : "fa-play";
+        const subjectClass = quiz.subject.toLowerCase().replace(/\s+/g, '-');
+
+        return `
+          <div class="quiz-card">
+            <span class="badge ${subjectClass}">${quiz.subject}</span>
+            <h3>${quiz.title}</h3>
+            <p class="quiz-meta"><i class="fa-solid fa-user"></i> By ${quiz.author} • ${quiz.questions.length} Questions</p>
+            <button class="primary-btn start-btn" onclick="startQuiz('${quiz.id}')">
+              <i class="fa-solid ${btnIcon}"></i> ${btnText}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function startQuiz(quizId) {
+      currentQuiz = getStoredQuizzes().find(q => q.id === quizId);
+      if (!currentQuiz) return;
+
+      currentQuestionIdx = 0;
+      userScore = 0;
+
+      document.getElementById("player-quiz-title").textContent = currentQuiz.title;
+      document.getElementById("quiz-results").classList.add("hidden");
+      document.getElementById("question-box").classList.remove("hidden");
+      document.getElementById("quiz-player").classList.remove("hidden");
+
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const qData = currentQuiz.questions[currentQuestionIdx];
+      const totalQ = currentQuiz.questions.length;
+
+      document.getElementById("quiz-progress").style.width = `${(currentQuestionIdx / totalQ) * 100}%`;
+      document.getElementById("question-text").textContent = `Q${currentQuestionIdx + 1}: ${qData.q}`;
+
+      const optionsGrid = document.getElementById("options-container");
+      optionsGrid.innerHTML = qData.options.map((opt, i) => `
+        <button class="option-btn" onclick="selectAnswer(${i})">${opt}</button>
+      `).join('');
+    }
+
+    function selectAnswer(selectedIdx) {
+      if (selectedIdx === currentQuiz.questions[currentQuestionIdx].answer) {
+        userScore++;
+      }
+
+      currentQuestionIdx++;
+
+      if (currentQuestionIdx < currentQuiz.questions.length) {
+        loadQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      document.getElementById("quiz-progress").style.width = `100%`;
+      document.getElementById("question-box").classList.add("hidden");
+
+      const totalQ = currentQuiz.questions.length;
+      const quizId = currentQuiz.id;
+
+      let quizScores = JSON.parse(localStorage.getItem("quizScores") || "{}");
+      const previousBest = quizScores[quizId] || 0;
+
+      let xpEarned = 0;
+      if (userScore > previousBest) {
+        const scoreDifference = userScore - previousBest;
+        xpEarned = scoreDifference * 10;
+
+        quizScores[quizId] = userScore;
+        localStorage.setItem("quizScores", JSON.stringify(quizScores));
+
+        let completedQuizzes = JSON.parse(localStorage.getItem("completedQuizzes") || "[]");
+        if (!completedQuizzes.includes(quizId)) {
+          completedQuizzes.push(quizId);
+          localStorage.setItem("completedQuizzes", JSON.stringify(completedQuizzes));
+        }
+      }
+
+      document.getElementById("score-text").textContent = `You scored ${userScore} out of ${totalQ}!`;
+      document.getElementById("earned-xp").textContent = xpEarned;
+
+      if (typeof addXP === "function" && xpEarned > 0) {
+        addXP(xpEarned);
+      }
+
+      document.getElementById("quiz-results").classList.remove("hidden");
+    }
+
+    function closeQuizPlayer() {
+      document.getElementById("quiz-player").classList.add("hidden");
+      renderQuizList();
+    }
+    // Map subject names directly to your CSS class names
+const subjectClasses = {
+  "Mathematics": "math",
+  "Science": "science",
+  "English": "english",
+  "Bahasa Melayu": "bm" // Ensures it matches .badge.bm in CSS
+};
+
+const subjectClass = subjectClasses[quiz.subject] || quiz.subject.toLowerCase().replace(/\s+/g, '-');
+  </script>
+    <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
+    <audio id="focus-audio" preload="metadata"></audio>
+
+    <!-- Minimized Circle Button -->
+    <button class="widget-circle-btn" aria-label="Open Music Player">
+      <i class="fa-solid fa-compact-disc"></i>
+    </button>
+
+    <!-- Expanded Card -->
+    <div class="music-card-content">
+      <div class="widget-top-bar">
+        <button class="minimize-btn" onclick="toggleWidgetExpand(event)" title="Minimize">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="player-main">
+        <div class="disc-icon" id="disc-icon">
+          <i class="fa-solid fa-compact-disc"></i>
+        </div>
+        <div class="track-details">
+          <span class="track-title" id="current-title">Lo-Fi Rain & Beats</span>
+          <span class="track-status" id="audio-status">Paused</span>
+        </div>
+
+        <div class="controls-row">
+          <button class="control-btn" onclick="prevTrack(event)"><i class="fa-solid fa-backward-step"></i></button>
+          <button class="play-btn" onclick="toggleCustomAudio(event)" id="custom-play-btn">
+            <i class="fa-solid fa-play" id="play-icon"></i>
+          </button>
+          <button class="control-btn" onclick="nextTrack(event)"><i class="fa-solid fa-forward-step"></i></button>
+        </div>
+      </div>
+
+      <!-- Playlist Header -->
+      <div class="playlist-header" onclick="togglePlaylist(event)">
+        <span><i class="fa-solid fa-list-ul"></i> STUDY PLAYLIST</span>
+        <button class="collapse-btn"><i class="fa-solid fa-chevron-up" id="collapse-icon"></i></button>
+      </div>
+
+      <!-- Playlist Items Container -->
+      <div class="playlist-scroll-area" id="playlist-container">
+        <ul class="playlist">
+          <li class="playlist-item active" onclick="playSelectedTrack(0, event)">
+            <span><i class="fa-solid fa-cloud-rain"></i> Zelda Lullaby</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(1, event)">
+            <span><i class="fa-solid fa-coffee"></i> Saria's Song</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(2, event)">
+            <span><i class="fa-solid fa-brain"></i> Song Of Healing</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(3, event)">
+            <span><i class="fa-solid fa-fire"></i> Great Fairy Fountain</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(4, event)">
+            <span><i class="fa-solid fa-tree"></i> Mipha Theme</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

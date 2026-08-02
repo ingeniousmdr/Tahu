@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tahu - Math Tips</title>
+    
+    <!-- Google Fonts & Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="subject.css" />
+    <link rel="icon" type="image/png" href="icon.png" />
+    
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/c8c917a1e5.js" crossorigin="anonymous"></script>
+
+    <!-- KaTeX CSS & JS for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+      onload="renderMathInElement(document.body, {delimiters: [{left: '$', right: '$', display: false}]});"></script>
+
+    <script src="script.js"></script>
+  </head>
+
+<body class="theme-math">
+  <header>
+    <nav class="navbar">
+      <div class="logo">
+        <img src="icon.png" alt="Logo" class="nav-logo">
+        <a href="index.html"><span>Tahu</span></a>
+      </div>
+      <div class="nav-links">
+        <div class="streak-badge">
+          <i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count">1 Day</span>
+        </div>
+        
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="tips.html" class="nav-btn active">Tips</a>
+        <a href="learn.html" class="nav-btn">Aid</a>
+        <!-- Add class "active" to the button corresponding to the current page -->
+        <a href="quiz.html" class="nav-btn ">Quiz</a>
+        <a href="community.html" class="nav-btn">Community</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- MATH TIP 1: TRIGONOMETRY -->
+    <div class="tip-card math-card">
+      <div class="card-header-flex">
+        <span class="badge math"><i class="fa-solid fa-calculator"></i> Mathematics</span>
+        <span class="xp-tag">+10 XP</span>
+      </div>
+
+      <h3>Trigonometric Ratios (Sin, Cos, Tan)</h3>
+
+      <div class="interactive-prompt">
+        <p class="prompt-question"><strong>Memory Trick:</strong> How do you quickly remember the formulas for Sin, Cos, and Tan?</p>
+        
+        <div class="tip-answer hidden">
+          <div class="mnemonic-box">
+            <span class="highlight">SOH · CAH · TOA</span>
+          </div>
+          <p class="explanation">
+            <strong>SOH:</strong> <strong>S</strong>in = <strong>O</strong>pposite / <strong>H</strong>ypotenuse<br>
+            <strong>CAH:</strong> <strong>C</strong>os = <strong>A</strong>djacent / <strong>H</strong>ypotenuse<br>
+            <strong>TOA:</strong> <strong>T</strong>an = <strong>O</strong>pposite / <strong>A</strong>djacent
+          </p>
+        </div>
+
+        <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+          <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+        </button>
+      </div>
+
+      <div class="card-footer">
+        <button 
+          class="complete-btn" 
+          data-tip-id="math_tip_soh_cah_toa" 
+          onclick="markTipComplete('math', 'math_tip_soh_cah_toa', this)">
+          <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+        </button>
+      </div>
+    </div>
+
+    <!-- MATH TIP 2: GRADIENT FORMULA -->
+    <div class="tip-card math-card">
+      <div class="card-header-flex">
+        <span class="badge math"><i class="fa-solid fa-calculator"></i> Mathematics</span>
+        <span class="xp-tag">+10 XP</span>
+      </div>
+
+      <h3>Line Gradient (Slope) Formula</h3>
+
+      <div class="interactive-prompt">
+        <p class="prompt-question"><strong>Memory Trick:</strong> Which coordinates go on top in the gradient formula $m = \frac{y_2 - y_1}{x_2 - x_1}$?</p>
+        
+        <div class="tip-answer hidden">
+          <div class="mnemonic-box">
+            <span class="highlight">Rise over Run</span> (Y before X)
+          </div>
+          <p class="explanation">
+            You <strong>RISE UP</strong> (vertical = $Y$) before you <strong>RUN ACROSS</strong> (horizontal = $X$).<br>
+            Formula: $m = \frac{\Delta y}{\Delta x}$
+          </p>
+        </div>
+
+        <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+          <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+        </button>
+      </div>
+
+      <div class="card-footer">
+        <button 
+          class="complete-btn" 
+          data-tip-id="math_tip_gradient" 
+          onclick="markTipComplete('math', 'math_tip_gradient', this)">
+          <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+        </button>
+      </div>
+    </div>
+
+    <!-- MATH TIP 3: QUADRATIC FORMULA -->
+    <div class="tip-card math-card">
+      <div class="card-header-flex">
+        <span class="badge math"><i class="fa-solid fa-calculator"></i> Mathematics</span>
+        <span class="xp-tag">+10 XP</span>
+      </div>
+
+      <h3>Quadratic Formula Story</h3>
+
+      <div class="interactive-prompt">
+        <p class="prompt-question"><strong>Memory Trick:</strong> How to never forget $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$?</p>
+        
+        <div class="tip-answer hidden">
+          <div class="mnemonic-box">
+            A <span class="highlight">negative boy</span> couldn't decide ($\pm$) to go to a <span class="highlight">radical party</span>...
+          </div>
+          <p class="explanation">
+            The boy was <strong>square</strong> ($b^2$), so he missed out on <strong>4 awesome chicks</strong> ($-4ac$), and it was all over by <strong>2 am</strong> ($2a$).
+          </p>
+        </div>
+
+        <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+          <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+        </button>
+      </div>
+
+      <div class="card-footer">
+        <button 
+          class="complete-btn" 
+          data-tip-id="math_tip_quadratic" 
+          onclick="markTipComplete('math', 'math_tip_quadratic', this)">
+          <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Streak Lost Modal -->
+  <div id="streak-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-icon">💔</div>
+      <h2>Streak Lost!</h2>
+      <p>
+        You missed a day, so your streak reset to 1. Don't worry, start fresh today!
+      </p>
+      <button id="close-modal-btn" class="modal-btn">Let's Go!</button>
+    </div>
+  </div>
+
+  <!-- Translate Toggle Button -->
+  <button id="translate-btn" class="notranslate" translate="no" onclick="toggleLanguage()">
+    🌐 Switch to Malay
+  </button>
+  
+  <!-- External Google Translate Script -->
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <!-- Floating Pomodoro Widget -->
+  <div class="pomodoro-widget" id="pomodoro-widget">
+    <button class="widget-toggle" onclick="toggleWidget()">
+      <i class="fa-solid fa-stopwatch"></i>
+      <span id="widget-min-display">25:00</span>
+    </button>
+
+    <div class="widget-card hidden" id="widget-card">
+      <div class="pomodoro-header">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span>Focus Timer</span>
+      </div>
+      
+      <div class="timer-display" id="timer-display">25:00</div>
+      
+      <div class="timer-controls">
+        <button id="start-btn" onclick="startTimer()">Start</button>
+        <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
+        <button id="reset-btn" onclick="resetTimer()">Reset</button>
+      </div>
+      
+      <p class="timer-status" id="timer-status">Ready to study?</p>
+    </div>
+  </div>
+
+  <script>
+    function toggleTipAnswer(btnElement) {
+      const answerBox = btnElement.previousElementSibling;
+      
+      if (answerBox.classList.contains('hidden')) {
+        answerBox.classList.remove('hidden');
+        btnElement.innerHTML = `<i class="fa-solid fa-eye-slash"></i> Hide Memory Trick`;
+      } else {
+        answerBox.classList.add('hidden');
+        btnElement.innerHTML = `<i class="fa-solid fa-eye"></i> Reveal Memory Trick`;
+      }
+    }
+  </script>
+    <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
+    <audio id="focus-audio" preload="metadata"></audio>
+
+    <!-- Minimized Circle Button -->
+    <button class="widget-circle-btn" aria-label="Open Music Player">
+      <i class="fa-solid fa-compact-disc"></i>
+    </button>
+
+    <!-- Expanded Card -->
+    <div class="music-card-content">
+      <div class="widget-top-bar">
+        <button class="minimize-btn" onclick="toggleWidgetExpand(event)" title="Minimize">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="player-main">
+        <div class="disc-icon" id="disc-icon">
+          <i class="fa-solid fa-compact-disc"></i>
+        </div>
+        <div class="track-details">
+          <span class="track-title" id="current-title">Lo-Fi Rain & Beats</span>
+          <span class="track-status" id="audio-status">Paused</span>
+        </div>
+
+        <div class="controls-row">
+          <button class="control-btn" onclick="prevTrack(event)"><i class="fa-solid fa-backward-step"></i></button>
+          <button class="play-btn" onclick="toggleCustomAudio(event)" id="custom-play-btn">
+            <i class="fa-solid fa-play" id="play-icon"></i>
+          </button>
+          <button class="control-btn" onclick="nextTrack(event)"><i class="fa-solid fa-forward-step"></i></button>
+        </div>
+      </div>
+
+      <!-- Playlist Header -->
+      <div class="playlist-header" onclick="togglePlaylist(event)">
+        <span><i class="fa-solid fa-list-ul"></i> STUDY PLAYLIST</span>
+        <button class="collapse-btn"><i class="fa-solid fa-chevron-up" id="collapse-icon"></i></button>
+      </div>
+
+      <!-- Playlist Items Container -->
+      <div class="playlist-scroll-area" id="playlist-container">
+        <ul class="playlist">
+          <li class="playlist-item active" onclick="playSelectedTrack(0, event)">
+            <span><i class="fa-solid fa-cloud-rain"></i> Zelda Lullaby</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(1, event)">
+            <span><i class="fa-solid fa-coffee"></i> Saria's Song</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(2, event)">
+            <span><i class="fa-solid fa-brain"></i> Song Of Healing</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(3, event)">
+            <span><i class="fa-solid fa-fire"></i> Great Fairy Fountain</span>
+          </li>
+          <li class="playlist-item" onclick="playSelectedTrack(4, event)">
+            <span><i class="fa-solid fa-tree"></i> Mipha Theme</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
