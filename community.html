@@ -24,10 +24,11 @@
       background-color: #fdfbf7;
       color: #334155;
       margin: 0;
-      padding: 24px;
+      padding: 16px;
     }
 
     .community-container {
+      width: 100%;
       max-width: 720px;
       margin: 0 auto;
     }
@@ -37,11 +38,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .community-header h2 {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       margin: 0;
       color: #1e293b;
     }
@@ -50,12 +53,15 @@
       background-color: #f59e0b;
       color: #ffffff;
       border: none;
-      padding: 10px 20px;
+      padding: 10px 18px;
       border-radius: 20px;
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       cursor: pointer;
       transition: background 0.2s ease, transform 0.1s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .btn-primary:hover {
@@ -68,8 +74,8 @@
       background: #ffffff;
       border: 1px solid #f1f5f9;
       border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 28px;
+      padding: 16px;
+      margin-bottom: 24px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     }
 
@@ -113,7 +119,7 @@
       background: #ffffff;
       border: 1px solid #f1f5f9;
       border-radius: 16px;
-      padding: 20px;
+      padding: 16px;
       display: flex;
       gap: 16px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
@@ -142,6 +148,9 @@
       color: #64748b;
       font-size: 1rem;
       transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .vote-btn:hover {
@@ -165,6 +174,7 @@
     /* Main Post Details */
     .post-main {
       flex: 1;
+      min-width: 0; /* Prevents overflow inside flex containers */
     }
 
     .post-meta {
@@ -172,6 +182,15 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .post-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
     .badge-tag {
@@ -187,6 +206,7 @@
     .post-author {
       font-size: 0.85rem;
       color: #64748b;
+      word-break: break-word;
     }
 
     .delete-btn {
@@ -207,15 +227,17 @@
 
     .post-title {
       margin: 0 0 6px 0;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       color: #1e293b;
+      word-break: break-word;
     }
 
     .post-body {
       margin: 0 0 12px 0;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       color: #475569;
       line-height: 1.5;
+      word-break: break-word;
     }
 
     .comment-toggle-btn {
@@ -228,7 +250,7 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-radius: 8px;
       transition: background 0.2s, color 0.2s;
     }
@@ -259,7 +281,7 @@
 
     .comment-item {
       background: #f8fafc;
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 10px;
       font-size: 0.88rem;
     }
@@ -274,11 +296,13 @@
     .comment-author {
       font-weight: 700;
       color: #1e293b;
+      word-break: break-word;
     }
 
     .comment-text {
       margin: 0;
       color: #475569;
+      word-break: break-word;
     }
 
     .comment-form {
@@ -290,6 +314,7 @@
     .comment-form-row {
       display: flex;
       gap: 8px;
+      flex-direction: column;
     }
 
     .comment-form input {
@@ -299,26 +324,29 @@
 
     .empty-state {
       text-align: center;
-      padding: 40px;
+      padding: 30px 15px;
       color: #94a3b8;
     }
 
     /* Custom Toast Popup */
     .toast {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
+      bottom: 20px;
+      right: 20px;
+      left: 20px;
+      max-width: 400px;
+      margin-left: auto;
       background-color: #ffffff;
       color: #334155;
       border-left: 5px solid #f59e0b;
-      padding: 14px 20px;
+      padding: 12px 16px;
       border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
       display: flex;
       align-items: center;
       gap: 12px;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       z-index: 9999;
       opacity: 0;
       transform: translateY(20px);
@@ -349,6 +377,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 16px;
       z-index: 10000;
       opacity: 0;
       pointer-events: none;
@@ -363,8 +392,8 @@
     .modal-box {
       background: #ffffff;
       border-radius: 20px;
-      padding: 24px;
-      width: 90%;
+      padding: 20px;
+      width: 100%;
       max-width: 380px;
       text-align: center;
       box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
@@ -377,34 +406,34 @@
     }
 
     .modal-icon {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       background: #fef2f2;
       color: #ef4444;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 16px;
-      font-size: 1.25rem;
+      margin: 0 auto 12px;
+      font-size: 1.15rem;
     }
 
     .modal-box h3 {
       margin: 0 0 8px;
       color: #1e293b;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
     }
 
     .modal-box p {
       margin: 0 0 20px;
       color: #64748b;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       line-height: 1.4;
     }
 
     .modal-actions {
       display: flex;
-      gap: 12px;
+      gap: 10px;
     }
 
     .modal-actions button {
@@ -434,6 +463,51 @@
 
     .btn-delete:hover {
       background: #dc2626;
+    }
+
+    /* MEDIA QUERIES FOR MOBILE RESPONSIVENESS */
+    @media (min-width: 480px) {
+      .comment-form-row {
+        flex-direction: row;
+      }
+      body {
+        padding: 24px;
+      }
+      .toast {
+        left: auto;
+        right: 30px;
+        bottom: 30px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .post-card {
+        flex-direction: column-reverse;
+        gap: 12px;
+      }
+
+      .vote-box {
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      .vote-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
+      }
+
+      .community-header h2 {
+        font-size: 1.25rem;
+      }
+
+      .create-post-card {
+        padding: 14px;
+      }
     }
   </style>
 </head>
@@ -486,7 +560,7 @@
         <div class="form-group">
           <textarea id="post-content" class="form-control" placeholder="What's on your mind?" required></textarea>
         </div>
-        <button type="submit" class="btn-primary">Publish Post</button>
+        <button type="submit" class="btn-primary" style="width: 100%;">Publish Post</button>
       </form>
     </div>
 
@@ -594,7 +668,7 @@
             </div>
             <div class="post-main">
               <div class="post-meta">
-                <div>
+                <div class="post-meta-left">
                   <span class="badge-tag">${escapeHTML(post.category)}</span>
                   <span class="post-author">• Posted by ${escapeHTML(post.username)}</span>
                 </div>
