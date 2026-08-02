@@ -27,6 +27,92 @@
       padding: 16px;
     }
 
+    /* Navbar Styles */
+    header {
+      background: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      padding: 12px 20px;
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo a {
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #1e293b;
+    }
+
+    /* Hamburger Button (Three Dash Icon) */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: #334155;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .menu-toggle:hover {
+      background-color: #f1f5f9;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fffbe3;
+      border: 1px solid #fde68a;
+      color: #d97706;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      color: #64748b;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+      color: #f59e0b;
+      background: #fef3c7;
+    }
+
+    /* Container */
     .community-container {
       width: 100%;
       max-width: 720px;
@@ -174,7 +260,7 @@
     /* Main Post Details */
     .post-main {
       flex: 1;
-      min-width: 0; /* Prevents overflow inside flex containers */
+      min-width: 0;
     }
 
     .post-meta {
@@ -465,7 +551,36 @@
       background: #dc2626;
     }
 
-    /* MEDIA QUERIES FOR MOBILE RESPONSIVENESS */
+    /* MEDIA QUERIES FOR MOBILE & COLLAPSIBLE NAVBAR */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid #f1f5f9;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .streak-badge {
+        justify-content: center;
+      }
+
+      .nav-btn {
+        text-align: center;
+      }
+    }
+
     @media (min-width: 480px) {
       .comment-form-row {
         flex-direction: row;
@@ -519,7 +634,13 @@
         <img src="icon.png" alt="Logo" class="nav-logo">
         <a href="index.html"><span>Tahu</span></a>
       </div>
-      <div class="nav-links">
+
+      <!-- Hamburger Button (Three Dash Icon) -->
+      <button class="menu-toggle" id="menu-toggle-btn" aria-label="Toggle Navigation">
+        <i class="fa-solid fa-bars" id="menu-icon"></i>
+      </button>
+
+      <div class="nav-links" id="nav-links">
         <div class="streak-badge">
           <i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count">1 Day</span>
         </div>
@@ -592,6 +713,22 @@
   </div>
 
   <script>
+    // Navbar Menu Toggle Handler
+    const menuToggleBtn = document.getElementById('menu-toggle-btn');
+    const navLinks = document.getElementById('nav-links');
+    const menuIcon = document.getElementById('menu-icon');
+
+    menuToggleBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      if (navLinks.classList.contains('active')) {
+        menuIcon.classList.remove('fa-bars');
+        menuIcon.classList.add('fa-xmark');
+      } else {
+        menuIcon.classList.remove('fa-xmark');
+        menuIcon.classList.add('fa-bars');
+      }
+    });
+
     // 1. Initialize Supabase Client
     const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
@@ -617,13 +754,11 @@
       const feedEl = document.getElementById("posts-feed");
       const upvotedPosts = JSON.parse(localStorage.getItem('upvotedPosts') || '[]');
       
-      // Try fetching posts along with their nested comments
       let { data: posts, error } = await db
         .from("posts")
         .select("*, comments(*)")
         .order("created_at", { ascending: false });
 
-      // Fallback: If relational query fails (e.g., table missing), fetch posts directly
       if (error) {
         console.warn("Relational query failed, attempting to load posts without comments...", error);
         const fallback = await db.from("posts").select("*").order("created_at", { ascending: false });
@@ -736,7 +871,7 @@
     }
 
     // Delete Handlers
-    let pendingDelete = { id: null, type: null }; // type can be 'post' or 'comment'
+    let pendingDelete = { id: null, type: null };
 
     function deletePost(postId) {
       pendingDelete = { id: postId, type: 'post' };
