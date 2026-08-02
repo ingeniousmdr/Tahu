@@ -27,13 +27,13 @@
       padding: 16px;
     }
 
-    /* Header Navbar Styles */
+    /* Clean Header Navbar Styles - No white card background */
     header {
-      background: #ffffff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      border-radius: 12px;
-      margin-bottom: 24px;
-      padding: 12px 20px;
+      background: transparent;
+      box-shadow: none;
+      border-radius: 0;
+      margin-bottom: 16px;
+      padding: 8px 4px;
     }
 
     .navbar {
@@ -45,7 +45,7 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .nav-logo {
@@ -60,21 +60,22 @@
       color: #1e293b;
     }
 
-    /* Hamburger Toggle Button */
+    /* Hamburger Toggle Button at top left */
     .menu-toggle {
       display: none;
-      background: none;
-      border: none;
-      font-size: 1.4rem;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      font-size: 1.3rem;
       color: #334155;
       cursor: pointer;
-      padding: 6px;
-      border-radius: 6px;
-      transition: background 0.2s;
+      padding: 8px 12px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      transition: background 0.2s, transform 0.1s;
     }
 
-    .menu-toggle:hover {
-      background-color: #f1f5f9;
+    .menu-toggle:active {
+      transform: scale(0.95);
     }
 
     /* Desktop Navigation Links */
@@ -111,7 +112,7 @@
       background: #fef3c7;
     }
 
-    /* Single Mobile Sidebar & Backdrop */
+    /* Mobile Slide-Out Sidebar Panel & Overlay */
     .sidebar-overlay {
       position: fixed;
       top: 0;
@@ -616,10 +617,10 @@
     /* RESPONSIVE MEDIA QUERIES */
     @media (max-width: 768px) {
       .menu-toggle {
-        display: block;
+        display: inline-block;
       }
 
-      /* Hide inline header nav-links on mobile in favor of sidebar */
+      /* Hide inline header nav-links on mobile */
       .nav-links {
         display: none;
       }
@@ -672,11 +673,11 @@
 </head>
 <body>
 
-  <!-- Top Navigation Header -->
+  <!-- Top Clean Navigation Header (No White Background Box) -->
   <header>
     <nav class="navbar">
       <div class="logo">
-        <!-- Hamburger Button to trigger single sidebar -->
+        <!-- Clean standalone Hamburger Button at Top Left -->
         <button class="menu-toggle" id="open-sidebar-btn" aria-label="Open Sidebar">
           <i class="fa-solid fa-bars"></i>
         </button>
@@ -698,7 +699,7 @@
     </nav>
   </header>
 
-  <!-- Single Mobile Sidebar Panel & Overlay -->
+  <!-- Mobile Slide-Out Sidebar Panel & Overlay -->
   <div class="sidebar-overlay" id="sidebar-overlay"></div>
   <aside class="sidebar-container" id="single-sidebar">
     <div class="sidebar-header">
@@ -802,14 +803,13 @@
     closeSidebarBtn.addEventListener('click', closeSidebar);
     sidebarOverlay.addEventListener('click', closeSidebar);
 
-    // 1. Initialize Supabase Client
+    // Initialize Supabase Client
     const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
     
     const { createClient } = supabase;
     const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Toast Notification Helper
     function showToast(message) {
       const toast = document.getElementById("toast-notification");
       const toastMessage = document.getElementById("toast-message");
@@ -822,7 +822,6 @@
       }, 3000);
     }
 
-    // 2. Load Posts from Database
     async function loadPosts() {
       const feedEl = document.getElementById("posts-feed");
       const upvotedPosts = JSON.parse(localStorage.getItem('upvotedPosts') || '[]');
@@ -887,12 +886,10 @@
               <h3 class="post-title">${escapeHTML(post.title)}</h3>
               <p class="post-body">${escapeHTML(post.content)}</p>
 
-              <!-- Comments Toggle Button -->
               <button class="comment-toggle-btn" onclick="toggleComments(${post.id})">
                 <i class="fa-regular fa-comment"></i> <span id="comment-count-${post.id}">${commentCount}</span> Comments
               </button>
 
-              <!-- Comments Container -->
               <div class="comments-section" id="comments-section-${post.id}">
                 <div class="comments-list" id="comments-list-${post.id}">
                   ${commentsMarkup.length ? commentsMarkup : '<p style="color: #94a3b8; font-size: 0.85rem; margin: 4px 0 12px;">No comments yet. Be the first!</p>'}
@@ -911,7 +908,6 @@
       }).join('');
     }
 
-    // Toggle Comments Section Visibility
     function toggleComments(postId) {
       const section = document.getElementById(`comments-section-${postId}`);
       if (section) {
@@ -919,7 +915,6 @@
       }
     }
 
-    // Submit New Comment
     async function submitComment(event, postId) {
       event.preventDefault();
       const usernameInput = document.getElementById(`comment-user-${postId}`);
@@ -943,7 +938,6 @@
       loadPosts();
     }
 
-    // Delete Handlers
     let pendingDelete = { id: null, type: null };
 
     function deletePost(postId) {
@@ -990,7 +984,6 @@
       }
     }
 
-    // 3. Create a New Post
     document.getElementById("create-post-form").addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -1019,7 +1012,6 @@
       loadPosts();
     });
 
-    // 4. Upvote Handler
     async function upvotePost(id, currentVotes) {
       const upvotedPosts = JSON.parse(localStorage.getItem('upvotedPosts') || '[]');
 
@@ -1047,7 +1039,6 @@
       }
     }
 
-    // Helpers
     function toggleForm() {
       const formCard = document.getElementById("post-form-card");
       formCard.style.display = formCard.style.display === "none" ? "block" : "none";
@@ -1067,12 +1058,10 @@
   <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
     <audio id="focus-audio" preload="metadata"></audio>
 
-    <!-- Minimized Circle Button -->
     <button class="widget-circle-btn" aria-label="Open Music Player">
       <i class="fa-solid fa-compact-disc"></i>
     </button>
 
-    <!-- Expanded Card -->
     <div class="music-card-content">
       <div class="widget-top-bar">
         <button class="minimize-btn" onclick="toggleWidgetExpand(event)" title="Minimize">
@@ -1098,13 +1087,11 @@
         </div>
       </div>
 
-      <!-- Playlist Header -->
       <div class="playlist-header" onclick="togglePlaylist(event)">
         <span><i class="fa-solid fa-list-ul"></i> STUDY PLAYLIST</span>
         <button class="collapse-btn"><i class="fa-solid fa-chevron-up" id="collapse-icon"></i></button>
       </div>
 
-      <!-- Playlist Items Container -->
       <div class="playlist-scroll-area" id="playlist-container">
         <ul class="playlist">
           <li class="playlist-item active" onclick="playSelectedTrack(0, event)">
