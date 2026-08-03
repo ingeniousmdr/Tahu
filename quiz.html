@@ -370,6 +370,29 @@ const subjectClasses = {
 
 const subjectClass = subjectClasses[quiz.subject] || quiz.subject.toLowerCase().replace(/\s+/g, '-');
   </script>
+
+    <!-- Floating Pomodoro Widget -->
+  <div class="pomodoro-widget" id="pomodoro-widget">
+    <button class="widget-toggle" onclick="toggleWidget()">
+      <i class="fa-solid fa-stopwatch"></i>
+      <span id="widget-min-display">25:00</span>
+    </button>
+
+    <div class="widget-card hidden" id="widget-card">
+      <div class="pomodoro-header">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span>Focus Timer</span>
+      </div>
+      <div class="timer-display" id="timer-display">25:00</div>
+      <div class="timer-controls">
+        <button id="start-btn" onclick="startTimer()">Start</button>
+        <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
+        <button id="reset-btn" onclick="resetTimer()">Reset</button>
+      </div>
+      <p class="timer-status" id="timer-status">Ready to study?</p>
+    </div>
+  </div>
+  
     <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
     <audio id="focus-audio" preload="metadata"></audio>
 
