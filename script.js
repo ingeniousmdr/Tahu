@@ -87,9 +87,12 @@ function initializeStreak() {
   localStorage.setItem(STREAK_KEY, streak);
 
   // Update Navigation Bar & Dashboard Streak Display
-  const streakDisplayNav = document.getElementById("streak-count");
-  if (streakDisplayNav) streakDisplayNav.textContent = `${streak} Day${streak > 1 ? "s" : ""}`;
+// New code to target both desktop and mobile IDs
+const streakDesktop = document.getElementById("streak-count-desktop");
+if (streakDesktop) streakDesktop.textContent = `${streak} Day${streak > 1 ? "s" : ""}`;
 
+const streakMobile = document.getElementById("streak-count-mobile");
+if (streakMobile) streakMobile.textContent = `${streak} Day${streak > 1 ? "s" : ""}`;
   const streakDisplayCard = document.getElementById("streak-count-card");
   if (streakDisplayCard) streakDisplayCard.textContent = `${streak} Day${streak > 1 ? "s" : ""}`;
 
