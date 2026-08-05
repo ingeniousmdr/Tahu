@@ -46,7 +46,6 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      background-color:none;
     }
 
     .nav-logo {
@@ -64,7 +63,7 @@
     /* Hamburger Toggle Button at top left */
     .menu-toggle {
       display: none;
-      background: none;
+      background: #ffffff;
       border: 1px solid #e2e8f0;
       font-size: 1.3rem;
       color: #334155;
@@ -113,8 +112,7 @@
       background: #fef3c7;
     }
 
-
-    /* Sidebar Overlay */
+    /* Mobile Slide-Out Sidebar Panel & Overlay */
     .sidebar-overlay {
       position: fixed;
       top: 0;
@@ -125,41 +123,33 @@
       backdrop-filter: blur(2px);
       z-index: 9998;
       opacity: 0;
-      visibility: hidden;
       pointer-events: none;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
+      transition: opacity 0.3s ease;
     }
 
     .sidebar-overlay.active {
       opacity: 1;
-      visibility: visible;
       pointer-events: auto;
     }
-    /* Mobile Slide-Out Sidebar Panel - Completely hidden off-screen by default */
+
     .sidebar-container {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 260px !important;
-      height: 100vh !important;
-      background-color: white !important;
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 260px;
+      height: 100vh;
+      background-color: #ffffff;
       box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-      z-index: 9999 !important;
+      z-index: 9999;
       padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      
-      /* Smooth transform sliding off-screen */
-      transform: translateX(-100%) !important;
-      visibility: hidden !important;
-      transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out !important;
+      transition: left 0.3s ease-in-out;
     }
 
-    /* Slides in ONLY when active */
     .sidebar-container.active {
-      transform: translateX(0) !important;
-      visibility: visible !important;
+      left: 0;
     }
 
     .sidebar-header {
@@ -683,11 +673,10 @@
 </head>
 <body>
 
-  <!-- Top Clean Navigation Header (No White Background Box) -->
+  <!-- Top Clean Navigation Header -->
   <header>
     <nav class="navbar">
       <div class="logo">
-        <!-- Clean standalone Hamburger Button at Top Left -->
         <button class="menu-toggle" id="open-sidebar-btn" aria-label="Open Sidebar">
           <i class="fa-solid fa-bars"></i>
         </button>
@@ -820,6 +809,9 @@
     const { createClient } = supabase;
     const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // Keep track of open comment sections to preserve state across refreshes
+    let openCommentSections = new Set();
+
     function showToast(message) {
       const toast = document.getElementById("toast-notification");
       const toastMessage = document.getElementById("toast-message");
@@ -862,6 +854,7 @@
         const isVoted = upvotedPosts.includes(post.id);
         const commentList = post.comments || [];
         const commentCount = commentList.length;
+        const isOpen = openCommentSections.has(post.id);
 
         const commentsMarkup = commentList.map(c => `
           <div class="comment-item">
@@ -900,7 +893,7 @@
                 <i class="fa-regular fa-comment"></i> <span id="comment-count-${post.id}">${commentCount}</span> Comments
               </button>
 
-              <div class="comments-section" id="comments-section-${post.id}">
+              <div class="comments-section ${isOpen ? 'open' : ''}" id="comments-section-${post.id}">
                 <div class="comments-list" id="comments-list-${post.id}">
                   ${commentsMarkup.length ? commentsMarkup : '<p style="color: #94a3b8; font-size: 0.85rem; margin: 4px 0 12px;">No comments yet. Be the first!</p>'}
                 </div>
@@ -922,6 +915,11 @@
       const section = document.getElementById(`comments-section-${postId}`);
       if (section) {
         section.classList.toggle("open");
+        if (section.classList.contains("open")) {
+          openCommentSections.add(postId);
+        } else {
+          openCommentSections.delete(postId);
+        }
       }
     }
 
@@ -945,7 +943,15 @@
       showToast("Comment added!");
       usernameInput.value = "";
       textInput.value = "";
-      loadPosts();
+
+      // Ensure the comment section stays expanded after auto-refresh
+      openCommentSections.add(postId);
+
+      // Auto-refresh feed dynamically
+      await loadPosts();
+
+      // OPTIONAL: If you want a full browser reload instead, uncomment the line below:
+      // window.location.reload();
     }
 
     let pendingDelete = { id: null, type: null };
@@ -978,7 +984,7 @@
             showToast("Error deleting post: " + error.message);
           } else {
             showToast("Post deleted successfully!");
-            loadPosts();
+            await loadPosts();
           }
         } else if (type === 'comment') {
           const { error } = await db.from('comments').delete().eq('id', id);
@@ -986,7 +992,7 @@
             showToast("Error deleting comment: " + error.message);
           } else {
             showToast("Comment deleted!");
-            loadPosts();
+            await loadPosts();
           }
         }
       } else {
@@ -1019,7 +1025,11 @@
         addXP(5);
       }
 
-      loadPosts();
+      // Auto-refresh feed dynamically
+      await loadPosts();
+
+      // OPTIONAL: If you want a full browser reload instead, uncomment the line below:
+      // window.location.reload();
     });
 
     async function upvotePost(id, currentVotes) {
@@ -1041,11 +1051,11 @@
 
       if (error) {
         console.error("Error updating upvote:", error);
-        loadPosts();
+        await loadPosts();
       } else {
         upvotedPosts.push(id);
         localStorage.setItem('upvotedPosts', JSON.stringify(upvotedPosts));
-        loadPosts();
+        await loadPosts();
       }
     }
 
@@ -1060,30 +1070,20 @@
       );
     }
 
+    // Enable Realtime Updates from Supabase (Auto Refresh Live for all users)
+    db.channel('public-db-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => {
+        loadPosts();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'comments' }, () => {
+        loadPosts();
+      })
+      .subscribe();
+
     document.addEventListener("DOMContentLoaded", loadPosts);
   </script>
   <script src="script.js"></script>
-  <!-- Floating Pomodoro Widget -->
-  <div class="pomodoro-widget" id="pomodoro-widget">
-    <button class="widget-toggle" onclick="toggleWidget()">
-      <i class="fa-solid fa-stopwatch"></i>
-      <span id="widget-min-display">25:00</span>
-    </button>
 
-    <div class="widget-card hidden" id="widget-card">
-      <div class="pomodoro-header">
-        <i class="fa-solid fa-stopwatch"></i>
-        <span>Focus Timer</span>
-      </div>
-      <div class="timer-display" id="timer-display">25:00</div>
-      <div class="timer-controls">
-        <button id="start-btn" onclick="startTimer()">Start</button>
-        <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
-        <button id="reset-btn" onclick="resetTimer()">Reset</button>
-      </div>
-      <p class="timer-status" id="timer-status">Ready to study?</p>
-    </div>
-  </div>
   <!-- Lo-Fi Music Widget -->
   <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
     <audio id="focus-audio" preload="metadata"></audio>
@@ -1141,6 +1141,31 @@
           </li>
         </ul>
       </div>
+    </div>
+  </div>
+
+  <!-- Floating Pomodoro Widget -->
+  <div class="pomodoro-widget" id="pomodoro-widget">
+    <button class="widget-toggle" onclick="toggleWidget()">
+      <i class="fa-solid fa-stopwatch"></i>
+      <span id="widget-min-display">25:00</span>
+    </button>
+
+    <div class="widget-card hidden" id="widget-card">
+      <div class="pomodoro-header">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span>Focus Timer</span>
+      </div>
+      
+      <div class="timer-display" id="timer-display">25:00</div>
+      
+      <div class="timer-controls">
+        <button id="start-btn" onclick="startTimer()">Start</button>
+        <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
+        <button id="reset-btn" onclick="resetTimer()">Reset</button>
+      </div>
+      
+      <p class="timer-status" id="timer-status">Ready to study?</p>
     </div>
   </div>
 </body>
