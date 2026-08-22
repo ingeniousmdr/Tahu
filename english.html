@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="subject.css" />
   <link rel="icon" type="image/png" href="icon.png" />
   <script src="https://kit.fontawesome.com/c8c917a1e5.js" crossorigin="anonymous"></script>
+  <!-- Supabase CDN Script -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 
   <style>
@@ -308,122 +310,121 @@
   </script>
 
   <main>
-    <!-- ENGLISH TIP 1: ACTIVE VS PASSIVE -->
-<div class="tip-card english-card">
-  <div class="card-header-flex">
-    <span class="badge english"><i class="fa-solid fa-language"></i> English</span>
-    <span class="xp-tag">+10 XP</span>
-  </div>
+    <div class="tips-grid" id="tips-container">
+      <!-- ENGLISH TIP 1: ACTIVE VS PASSIVE -->
+      <div class="tip-card english-card">
+        <div class="card-header-flex">
+          <span class="badge english"><i class="fa-solid fa-language"></i> English</span>
+          <span class="xp-tag">+10 XP</span>
+        </div>
 
-  <h3>Active vs. Passive Voice Trick</h3>
+        <h3>Active vs. Passive Voice Trick</h3>
 
-  <div class="interactive-prompt">
-    <p class="prompt-question"><strong>Memory Trick:</strong> How do you quickly tell if a sentence is written in the Passive Voice?</p>
-    
-    <div class="tip-answer hidden">
-      <div class="mnemonic-box">
-        Add <span class="highlight">"...by Zombies"</span> 🧟‍♂️ after the verb!
+        <div class="interactive-prompt">
+          <p class="prompt-question"><strong>Memory Trick:</strong> How do you quickly tell if a sentence is written in the Passive Voice?</p>
+          
+          <div class="tip-answer hidden">
+            <div class="mnemonic-box">
+              Add <span class="highlight">"...by Zombies"</span> 🧟‍♂️ after the verb!
+            </div>
+            <p class="explanation">
+              If you can insert "by zombies" after the action verb and it still makes grammatical sense, it’s <strong>Passive Voice</strong>!<br>
+              <em>Example: "The homework was eaten [by zombies]" ➔ Passive!</em>
+            </p>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+            <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+          </button>
+        </div>
+
+        <div class="card-footer">
+          <button 
+            class="complete-btn" 
+            data-tip-id="english_tip_passive_zombies" 
+            onclick="markTipComplete('english', 'english_tip_passive_zombies', this)">
+            <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+          </button>
+        </div>
       </div>
-      <p class="explanation">
-        If you can insert "by zombies" after the action verb and it still makes grammatical sense, it’s <strong>Passive Voice</strong>!<br>
-        <em>Example: "The homework was eaten [by zombies]" ➔ Passive!</em>
-      </p>
-    </div>
 
-    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-    </button>
-  </div>
+      <!-- ENGLISH TIP 2: CONNECTORS -->
+      <div class="tip-card english-card">
+        <div class="card-header-flex">
+          <span class="badge english"><i class="fa-solid fa-language"></i> English</span>
+          <span class="xp-tag">+10 XP</span>
+        </div>
 
-  <div class="card-footer">
-    <button 
-      class="complete-btn" 
-      data-tip-id="english_tip_passive_zombies" 
-      onclick="markTipComplete('english', 'english_tip_passive_zombies', this)">
-      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-    </button>
-  </div>
-</div>
+        <h3>Coordinating Conjunctions (FANBOYS)</h3>
 
+        <div class="interactive-prompt">
+          <p class="prompt-question"><strong>Memory Trick:</strong> What are the 7 main coordinating conjunctions used to join two clauses?</p>
+          
+          <div class="tip-answer hidden">
+            <div class="mnemonic-box">
+              <span class="highlight">F.A.N.B.O.Y.S</span>
+            </div>
+            <p class="explanation">
+              <strong>F</strong>or • <strong>A</strong>nd • <strong>N</strong>or • <strong>B</strong>ut • <strong>O</strong>r • <strong>Y</strong>et • <strong>S</strong>o<br>
+              <em>Rule: Use a comma before a FANBOYS word when linking two independent sentences!</em>
+            </p>
+          </div>
 
+          <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+            <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+          </button>
+        </div>
 
-<!-- ENGLISH TIP 2: CONNECTORS -->
-<div class="tip-card english-card">
-  <div class="card-header-flex">
-    <span class="badge english"><i class="fa-solid fa-language"></i> English</span>
-    <span class="xp-tag">+10 XP</span>
-  </div>
-
-  <h3>Coordinating Conjunctions (FANBOYS)</h3>
-
-  <div class="interactive-prompt">
-    <p class="prompt-question"><strong>Memory Trick:</strong> What are the 7 main coordinating conjunctions used to join two clauses?</p>
-    
-    <div class="tip-answer hidden">
-      <div class="mnemonic-box">
-        <span class="highlight">F.A.N.B.O.Y.S</span>
+        <div class="card-footer">
+          <button 
+            class="complete-btn" 
+            data-tip-id="english_tip_fanboys" 
+            onclick="markTipComplete('english', 'english_tip_fanboys', this)">
+            <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+          </button>
+        </div>
       </div>
-      <p class="explanation">
-        <strong>F</strong>or • <strong>A</strong>nd • <strong>N</strong>or • <strong>B</strong>ut • <strong>O</strong>r • <strong>Y</strong>et • <strong>S</strong>o<br>
-        <em>Rule: Use a comma before a FANBOYS word when linking two independent sentences!</em>
-      </p>
-    </div>
 
-    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-    </button>
-  </div>
+      <!-- ENGLISH TIP 3: ITS VS IT'S -->
+      <div class="tip-card english-card">
+        <div class="card-header-flex">
+          <span class="badge english"><i class="fa-solid fa-language"></i> English</span>
+          <span class="xp-tag">+10 XP</span>
+        </div>
 
-  <div class="card-footer">
-    <button 
-      class="complete-btn" 
-      data-tip-id="english_tip_fanboys" 
-      onclick="markTipComplete('english', 'english_tip_fanboys', this)">
-      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-    </button>
-  </div>
-</div>
+        <h3>"Its" vs. "It's" Confusing Words</h3>
 
-<!-- ENGLISH TIP 3: ITS VS IT'S -->
-<div class="tip-card english-card">
-  <div class="card-header-flex">
-    <span class="badge english"><i class="fa-solid fa-language"></i> English</span>
-    <span class="xp-tag">+10 XP</span>
-  </div>
+        <div class="interactive-prompt">
+          <p class="prompt-question"><strong>Memory Trick:</strong> How do you know when to use the apostrophe in "It's"?</p>
+          
+          <div class="tip-answer hidden">
+            <div class="mnemonic-box">
+              <span class="highlight">Apostrophe = Short for "IS" or "HAS"</span>
+            </div>
+            <p class="explanation">
+              <strong>It's:</strong> Means <em>"It is"</em> or <em>"It has"</em> (e.g., <u>It's</u> raining = It is raining).<br>
+              <strong>Its:</strong> Shows possession (e.g., The cat chased <u>its</u> tail).
+            </p>
+          </div>
 
-  <h3>"Its" vs. "It's" Confusing Words</h3>
+          <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+            <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+          </button>
+        </div>
 
-  <div class="interactive-prompt">
-    <p class="prompt-question"><strong>Memory Trick:</strong> How do you know when to use the apostrophe in "It's"?</p>
-    
-    <div class="tip-answer hidden">
-      <div class="mnemonic-box">
-        <span class="highlight">Apostrophe = Short for "IS" or "HAS"</span>
+        <div class="card-footer">
+          <button 
+            class="complete-btn" 
+            data-tip-id="english_tip_its_vs_its" 
+            onclick="markTipComplete('english', 'english_tip_its_vs_its', this)">
+            <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+          </button>
+        </div>
       </div>
-      <p class="explanation">
-        <strong>It's:</strong> Means <em>"It is"</em> or <em>"It has"</em> (e.g., <u>It's</u> raining = It is raining).<br>
-        <strong>Its:</strong> Shows possession (e.g., The cat chased <u>its</u> tail).
-      </p>
     </div>
+  </main>
 
-    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-    </button>
-  </div>
-
-  <div class="card-footer">
-    <button 
-      class="complete-btn" 
-      data-tip-id="english_tip_its_vs_its" 
-      onclick="markTipComplete('english', 'english_tip_its_vs_its', this)">
-      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-    </button>
-  </div>
-</div>
-
-
-
-      <!-- Streak Lost Modal -->
+  <!-- Streak Lost Modal -->
   <div id="streak-modal" class="modal-overlay hidden">
     <div class="modal-card">
       <div class="modal-icon">💔</div>
@@ -432,45 +433,34 @@
       <button id="close-modal-btn" class="modal-btn">Let's Go!</button>
     </div>
   </div>
-      <!-- Floating Pomodoro Widget -->
-    <div class="pomodoro-widget" id="pomodoro-widget">
-      <!-- Widget Header / Toggle Button -->
-      <button class="widget-toggle" onclick="toggleWidget()">
+
+  <!-- Floating Pomodoro Widget -->
+  <div class="pomodoro-widget" id="pomodoro-widget">
+    <!-- Widget Header / Toggle Button -->
+    <button class="widget-toggle" onclick="toggleWidget()">
+      <i class="fa-solid fa-stopwatch"></i>
+      <span id="widget-min-display">25:00</span>
+    </button>
+
+    <!-- Expanded Widget Card -->
+    <div class="widget-card hidden" id="widget-card">
+      <div class="pomodoro-header">
         <i class="fa-solid fa-stopwatch"></i>
-        <span id="widget-min-display">25:00</span>
-      </button>
-
-      <!-- Expanded Widget Card -->
-      <div class="widget-card hidden" id="widget-card">
-        <div class="pomodoro-header">
-          <i class="fa-solid fa-stopwatch"></i>
-          <span>Focus Timer</span>
-        </div>
-
-        <div class="timer-display" id="timer-display">25:00</div>
-
-        <div class="timer-controls">
-          <button id="start-btn" onclick="startTimer()">Start</button>
-          <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
-          <button id="reset-btn" onclick="resetTimer()">Reset</button>
-        </div>
-
-        <p class="timer-status" id="timer-status">Ready to study?</p>
+        <span>Focus Timer</span>
       </div>
+
+      <div class="timer-display" id="timer-display">25:00</div>
+
+      <div class="timer-controls">
+        <button id="start-btn" onclick="startTimer()">Start</button>
+        <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
+        <button id="reset-btn" onclick="resetTimer()">Reset</button>
+      </div>
+
+      <p class="timer-status" id="timer-status">Ready to study?</p>
     </div>
-    <script>
-  function toggleTipAnswer(btnElement) {
-  const answerBox = btnElement.previousElementSibling;
-  
-  if (answerBox.classList.contains('hidden')) {
-    answerBox.classList.remove('hidden');
-    btnElement.innerHTML = `<i class="fa-solid fa-eye-slash"></i> Hide Memory Trick`;
-  } else {
-    answerBox.classList.add('hidden');
-    btnElement.innerHTML = `<i class="fa-solid fa-eye"></i> Reveal Memory Trick`;
-  }
-}
-</script>
+  </div>
+
   <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
     <audio id="focus-audio" preload="metadata"></audio>
 
@@ -533,6 +523,63 @@
       </div>
     </div>
   </div>
+
+  <script>
+    function toggleTipAnswer(btnElement) {
+      const answerBox = btnElement.previousElementSibling;
+      
+      if (answerBox.classList.contains('hidden')) {
+        answerBox.classList.remove('hidden');
+        btnElement.innerHTML = `<i class="fa-solid fa-eye-slash"></i> Hide Memory Trick`;
+      } else {
+        answerBox.classList.add('hidden');
+        btnElement.innerHTML = `<i class="fa-solid fa-eye"></i> Reveal Memory Trick`;
+      }
+    }
+
+    // Initialize Supabase Client
+    const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Fetch dynamic tips published from admin.html
+    async function fetchSupabaseTips() {
+      const tipsContainer = document.getElementById('tips-container');
+
+      const { data: tips, error } = await supabaseClient
+        .from('tips')
+        .select('*')
+        .eq('subject', 'english')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching dynamic tips:', error.message);
+        return;
+      }
+
+      tips.forEach((tip) => {
+        const card = document.createElement('div');
+        card.className = 'tip-card english-card';
+        card.innerHTML = `
+          <div class="card-header-flex">
+            <span class="badge english"><i class="fa-solid fa-language"></i> English</span>
+            <span class="xp-tag">+10 XP</span>
+          </div>
+          <h3>${tip.title}</h3>
+          <p class="explanation">${tip.content}</p>
+          <div class="card-footer">
+            <button class="complete-btn" onclick="markTipComplete('english', 'tip-db-${tip.id}', this)">
+              <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+            </button>
+          </div>
+        `;
+        tipsContainer.appendChild(card);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchSupabaseTips);
+  </script>
 </body>
 
 </html>
