@@ -9,10 +9,9 @@
   <link rel="stylesheet" href="subject.css" />
   <link rel="icon" type="image/png" href="icon.png" />
   <script src="https://kit.fontawesome.com/c8c917a1e5.js" crossorigin="anonymous"></script>
-  <script src="script.js"></script>
-
-  <!-- Supabase JS Library -->
+  <!-- Supabase CDN Script -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
 
   <style>
     * {
@@ -252,7 +251,6 @@
   <main>
     <div class="tips-grid" id="tips-container">
 
-      <!-- Default Hardcoded Tips -->
       <div class="tip-card">
         <h3>Formula: Pendahuluan</h3>
 <pre>
@@ -425,7 +423,6 @@ Apa yang akan terjadi pada masa hadapan / Ramalan
   </div>
 
   <script>
-    // Navigation Drawer Controls
     const openSidebarBtn = document.getElementById('open-sidebar-btn');
     const closeSidebarBtn = document.getElementById('close-sidebar-btn');
     const mobileSidebar = document.getElementById('mobile-sidebar');
@@ -446,27 +443,27 @@ Apa yang akan terjadi pada masa hadapan / Ramalan
     sidebarOverlay.addEventListener('click', closeSidebar);
 
     // Supabase Configuration
-    // Initialize Supabase Client
     const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
- 
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // Fetch dynamic tips from Supabase
     async function fetchSupabaseTips() {
       const tipsContainer = document.getElementById('tips-container');
 
-      const { data: tips, error } = await _supabase
+      const { data: tips, error } = await supabaseClient
         .from('tips')
         .select('*')
         .eq('subject', 'bm')
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error loading Supabase tips:', error);
+        console.error('Error fetching dynamic tips:', error.message);
         return;
       }
 
+      // Render tips dynamically sent from admin.html
       tips.forEach((tip) => {
         const card = document.createElement('div');
         card.className = 'tip-card';
