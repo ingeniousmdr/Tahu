@@ -21,6 +21,9 @@
 
     <script src="script.js"></script>
 
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -307,114 +310,116 @@
   </script>
 
   <main>
-    <!-- MATH TIP 1: TRIGONOMETRY -->
-    <div class="tip-card math-card">
-      <div class="card-header-flex">
-        <span class="badge math"><i class="fa-solid fa-calculator"></i> Mathematics</span>
-        <span class="xp-tag">+10 XP</span>
-      </div>
-
-      <h3>Trigonometric Ratios (Sin, Cos, Tan)</h3>
-
-      <div class="interactive-prompt">
-        <p class="prompt-question"><strong>Memory Trick:</strong> How do you quickly remember the formulas for Sin, Cos, and Tan?</p>
-        
-        <div class="tip-answer hidden">
-          <div class="mnemonic-box">
-            <span class="highlight">SOH · CAH · TOA</span>
-          </div>
-          <p class="explanation">
-            <strong>SOH:</strong> <strong>S</strong>in = <strong>O</strong>pposite / <strong>H</strong>ypotenuse<br>
-            <strong>CAH:</strong> <strong>C</strong>os = <strong>A</strong>djacent / <strong>H</strong>ypotenuse<br>
-            <strong>TOA:</strong> <strong>T</strong>an = <strong>O</strong>pposite / <strong>A</strong>djacent
-          </p>
+    <div class="tips-grid" id="tips-container">
+      <!-- MATH TIP 1: TRIGONOMETRY -->
+      <div class="tip-card math-card">
+        <div class="card-header-flex">
+          <span class="badge math"><i class="fa-solid fa-calculator"></i> Mathematics</span>
+          <span class="xp-tag">+10 XP</span>
         </div>
 
-        <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-          <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-        </button>
-      </div>
+        <h3>Trigonometric Ratios (Sin, Cos, Tan)</h3>
 
-      <div class="card-footer">
-        <button 
-          class="complete-btn" 
-          data-tip-id="math_tip_soh_cah_toa" 
-          onclick="markTipComplete('math', 'math_tip_soh_cah_toa', this)">
-          <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-        </button>
-      </div>
-    </div>
-
-    <!-- MATH TIP 2: GRADIENT FORMULA -->
-    <div class="tip-card math-card">
-      <div class="card-header-flex">
-        <span class="badge math"><i class="fa-solid fa-calculator"></i> Mathematics</span>
-        <span class="xp-tag">+10 XP</span>
-      </div>
-
-      <h3>Line Gradient (Slope) Formula</h3>
-
-      <div class="interactive-prompt">
-        <p class="prompt-question"><strong>Memory Trick:</strong> Which coordinates go on top in the gradient formula $m = \frac{y_2 - y_1}{x_2 - x_1}$?</p>
-        
-        <div class="tip-answer hidden">
-          <div class="mnemonic-box">
-            <span class="highlight">Rise over Run</span> (Y before X)
+        <div class="interactive-prompt">
+          <p class="prompt-question"><strong>Memory Trick:</strong> How do you quickly remember the formulas for Sin, Cos, and Tan?</p>
+          
+          <div class="tip-answer hidden">
+            <div class="mnemonic-box">
+              <span class="highlight">SOH · CAH · TOA</span>
+            </div>
+            <p class="explanation">
+              <strong>SOH:</strong> <strong>S</strong>in = <strong>O</strong>pposite / <strong>H</strong>ypotenuse<br>
+              <strong>CAH:</strong> <strong>C</strong>os = <strong>A</strong>djacent / <strong>H</strong>ypotenuse<br>
+              <strong>TOA:</strong> <strong>T</strong>an = <strong>O</strong>pposite / <strong>A</strong>djacent
+            </p>
           </div>
-          <p class="explanation">
-            You <strong>RISE UP</strong> (vertical = $Y$) before you <strong>RUN ACROSS</strong> (horizontal = $X$).<br>
-            Formula: $m = \frac{\Delta y}{\Delta x}$
-          </p>
+
+          <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+            <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+          </button>
         </div>
 
-        <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-          <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-        </button>
+        <div class="card-footer">
+          <button 
+            class="complete-btn" 
+            data-tip-id="math_tip_soh_cah_toa" 
+            onclick="markTipComplete('math', 'math_tip_soh_cah_toa', this)">
+            <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+          </button>
+        </div>
       </div>
 
-      <div class="card-footer">
-        <button 
-          class="complete-btn" 
-          data-tip-id="math_tip_gradient" 
-          onclick="markTipComplete('math', 'math_tip_gradient', this)">
-          <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-        </button>
-      </div>
-    </div>
-
-    <!-- MATH TIP 3: QUADRATIC FORMULA -->
-    <div class="tip-card math-card">
-      <div class="card-header-flex">
-        <span class="badge math"><i class="fa-solid fa-calculator"></i> Mathematics</span>
-        <span class="xp-tag">+10 XP</span>
-      </div>
-
-      <h3>Quadratic Formula Story</h3>
-
-      <div class="interactive-prompt">
-        <p class="prompt-question"><strong>Memory Trick:</strong> How to never forget $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$?</p>
-        
-        <div class="tip-answer hidden">
-          <div class="mnemonic-box">
-            A <span class="highlight">negative boy</span> couldn't decide ($\pm$) to go to a <span class="highlight">radical party</span>...
-          </div>
-          <p class="explanation">
-            The boy was <strong>square</strong> ($b^2$), so he missed out on <strong>4 awesome chicks</strong> ($-4ac$), and it was all over by <strong>2 am</strong> ($2a$).
-          </p>
+      <!-- MATH TIP 2: GRADIENT FORMULA -->
+      <div class="tip-card math-card">
+        <div class="card-header-flex">
+          <span class="badge math"><i class="fa-solid fa-calculator"></i> Mathematics</span>
+          <span class="xp-tag">+10 XP</span>
         </div>
 
-        <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-          <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-        </button>
+        <h3>Line Gradient (Slope) Formula</h3>
+
+        <div class="interactive-prompt">
+          <p class="prompt-question"><strong>Memory Trick:</strong> Which coordinates go on top in the gradient formula $m = \frac{y_2 - y_1}{x_2 - x_1}$?</p>
+          
+          <div class="tip-answer hidden">
+            <div class="mnemonic-box">
+              <span class="highlight">Rise over Run</span> (Y before X)
+            </div>
+            <p class="explanation">
+              You <strong>RISE UP</strong> (vertical = $Y$) before you <strong>RUN ACROSS</strong> (horizontal = $X$).<br>
+              Formula: $m = \frac{\Delta y}{\Delta x}$
+            </p>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+            <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+          </button>
+        </div>
+
+        <div class="card-footer">
+          <button 
+            class="complete-btn" 
+            data-tip-id="math_tip_gradient" 
+            onclick="markTipComplete('math', 'math_tip_gradient', this)">
+            <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+          </button>
+        </div>
       </div>
 
-      <div class="card-footer">
-        <button 
-          class="complete-btn" 
-          data-tip-id="math_tip_quadratic" 
-          onclick="markTipComplete('math', 'math_tip_quadratic', this)">
-          <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-        </button>
+      <!-- MATH TIP 3: QUADRATIC FORMULA -->
+      <div class="tip-card math-card">
+        <div class="card-header-flex">
+          <span class="badge math"><i class="fa-solid fa-calculator"></i> Mathematics</span>
+          <span class="xp-tag">+10 XP</span>
+        </div>
+
+        <h3>Quadratic Formula Story</h3>
+
+        <div class="interactive-prompt">
+          <p class="prompt-question"><strong>Memory Trick:</strong> How to never forget $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$?</p>
+          
+          <div class="tip-answer hidden">
+            <div class="mnemonic-box">
+              A <span class="highlight">negative boy</span> couldn't decide ($\pm$) to go to a <span class="highlight">radical party</span>...
+            </div>
+            <p class="explanation">
+              The boy was <strong>square</strong> ($b^2$), so he missed out on <strong>4 awesome chicks</strong> ($-4ac$), and it was all over by <strong>2 am</strong> ($2a$).
+            </p>
+          </div>
+
+          <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+            <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+          </button>
+        </div>
+
+        <div class="card-footer">
+          <button 
+            class="complete-btn" 
+            data-tip-id="math_tip_quadratic" 
+            onclick="markTipComplete('math', 'math_tip_quadratic', this)">
+            <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+          </button>
+        </div>
       </div>
     </div>
   </main>
@@ -464,20 +469,7 @@
     </div>
   </div>
 
-  <script>
-    function toggleTipAnswer(btnElement) {
-      const answerBox = btnElement.previousElementSibling;
-      
-      if (answerBox.classList.contains('hidden')) {
-        answerBox.classList.remove('hidden');
-        btnElement.innerHTML = `<i class="fa-solid fa-eye-slash"></i> Hide Memory Trick`;
-      } else {
-        answerBox.classList.add('hidden');
-        btnElement.innerHTML = `<i class="fa-solid fa-eye"></i> Reveal Memory Trick`;
-      }
-    }
-  </script>
-    <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
+  <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
     <audio id="focus-audio" preload="metadata"></audio>
 
     <!-- Minimized Circle Button -->
@@ -539,5 +531,75 @@
       </div>
     </div>
   </div>
+
+  <script>
+    function toggleTipAnswer(btnElement) {
+      const answerBox = btnElement.previousElementSibling;
+      
+      if (answerBox.classList.contains('hidden')) {
+        answerBox.classList.remove('hidden');
+        btnElement.innerHTML = `<i class="fa-solid fa-eye-slash"></i> Hide Memory Trick`;
+      } else {
+        answerBox.classList.add('hidden');
+        btnElement.innerHTML = `<i class="fa-solid fa-eye"></i> Reveal Memory Trick`;
+      }
+    }
+
+    // Supabase Dynamic Data Fetcher (Connected to admin.html)
+    const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function fetchSupabaseTips() {
+      const tipsContainer = document.getElementById('tips-container');
+
+      const { data: tips, error } = await supabaseClient
+        .from('tips')
+        .select('*')
+        .eq('subject', 'math')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching dynamic tips:', error.message);
+        return;
+      }
+
+      tips.forEach((tip) => {
+        const card = document.createElement('div');
+        card.className = 'tip-card math-card';
+        card.innerHTML = `
+          <div class="card-header-flex">
+            <span class="badge math"><i class="fa-solid fa-calculator"></i> Mathematics</span>
+            <span class="xp-tag">+10 XP</span>
+          </div>
+          <h3>${tip.title}</h3>
+          <div class="interactive-prompt">
+            <div class="tip-answer hidden">
+              <p class="explanation">${tip.content}</p>
+            </div>
+            <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+              <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+            </button>
+          </div>
+          <div class="card-footer">
+            <button class="complete-btn" onclick="markTipComplete('math', 'tip-db-${tip.id}', this)">
+              <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+            </button>
+          </div>
+        `;
+        tipsContainer.appendChild(card);
+      });
+
+      // Render math equations in dynamic content
+      if (window.renderMathInElement) {
+        renderMathInElement(tipsContainer, {
+          delimiters: [{left: '$', right: '$', display: false}]
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchSupabaseTips);
+  </script>
 </body>
 </html>
