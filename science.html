@@ -16,6 +16,9 @@
     ></script>
     <script src="script.js"></script>
 
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -293,159 +296,159 @@
   </script>
 
   <main>
+    <div class="tips-grid" id="tips-container">
+      <!-- SCIENCE TIP CARD -->
+      <div class="tip-card science-card">
+        <div class="card-header-flex">
+          <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
+          <span class="xp-tag">+10 XP</span>
+        </div>
 
-<!-- SCIENCE TIP CARD -->
-<div class="tip-card science-card">
-  <div class="card-header-flex">
-    <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
-    <span class="xp-tag">+10 XP</span>
-  </div>
+        <h3 id="science-tip-title">Photosynthesis Equation Trick</h3>
 
-  <h3 id="science-tip-title">Photosynthesis Equation Trick</h3>
+        <!-- Interactive Memory Prompt -->
+        <div class="interactive-prompt">
+          <p class="prompt-question"><strong>Memory Trick:</strong> How do you easily remember what plants need for photosynthesis?</p>
+          
+          <!-- Hidden Answer/Mnemonic -->
+          <div id="tip-answer-box" class="tip-answer hidden">
+            <div class="mnemonic-box">
+              <span class="highlight">C.W.S</span> ➔ <strong>C</strong>arbon Dioxide + <strong>W</strong>ater + <strong>S</strong>unlight
+            </div>
+            <p class="explanation">Formula: <code>CO₂ + H₂O + Light ➔ Glucose + O₂</code></p>
+          </div>
 
-  <!-- Interactive Memory Prompt -->
-  <div class="interactive-prompt">
-    <p class="prompt-question"><strong>Memory Trick:</strong> How do you easily remember what plants need for photosynthesis?</p>
-    
-    <!-- Hidden Answer/Mnemonic -->
-    <div id="tip-answer-box" class="tip-answer hidden">
-      <div class="mnemonic-box">
-        <span class="highlight">C.W.S</span> ➔ <strong>C</strong>arbon Dioxide + <strong>W</strong>ater + <strong>S</strong>unlight
+          <!-- Interactive Reveal Button -->
+          <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+            <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+          </button>
+        </div>
+
+        <!-- Footer Action -->
+        <div class="card-footer">
+          <button 
+            class="complete-btn" 
+            data-tip-id="science_tip_photosynthesis" 
+            onclick="markTipComplete('science', 'science_tip_photosynthesis', this)">
+            <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+          </button>
+        </div>
       </div>
-      <p class="explanation">Formula: <code>CO₂ + H₂O + Light ➔ Glucose + O₂</code></p>
-    </div>
 
-    <!-- Interactive Reveal Button -->
-    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-    </button>
-  </div>
+      <!-- SCIENCE TIP 2: PERIODIC TABLE GROUPS -->
+      <div class="tip-card science-card">
+        <div class="card-header-flex">
+          <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
+          <span class="xp-tag">+10 XP</span>
+        </div>
 
-  <!-- Footer Action -->
-  <div class="card-footer">
-    <button 
-      class="complete-btn" 
-      data-tip-id="science_tip_photosynthesis" 
-      onclick="markTipComplete('science', 'science_tip_photosynthesis', this)">
-      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-    </button>
-  </div>
-</div>
+        <h3>Groups vs. Periods Trick</h3>
 
-<!-- SCIENCE TIP 2: PERIODIC TABLE GROUPS -->
-<div class="tip-card science-card">
-  <div class="card-header-flex">
-    <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
-    <span class="xp-tag">+10 XP</span>
-  </div>
+        <div class="interactive-prompt">
+          <p class="prompt-question"><strong>Memory Trick:</strong> How do you remember which way Groups and Periods go on the Periodic Table?</p>
+          
+          <div class="tip-answer hidden">
+            <div class="mnemonic-box">
+              <span class="highlight">G.U.P</span> & <span class="highlight">P.H</span>
+            </div>
+            <p class="explanation">
+              <strong>G</strong>roups go <strong>U</strong>p and down (Vertical Columns).<br>
+              <strong>P</strong>eriods go <strong>H</strong>orizontally (Rows across).
+            </p>
+          </div>
 
-  <h3>Groups vs. Periods Trick</h3>
+          <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+            <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+          </button>
+        </div>
 
-  <div class="interactive-prompt">
-    <p class="prompt-question"><strong>Memory Trick:</strong> How do you remember which way Groups and Periods go on the Periodic Table?</p>
-    
-    <div class="tip-answer hidden">
-      <div class="mnemonic-box">
-        <span class="highlight">G.U.P</span> & <span class="highlight">P.H</span>
+        <div class="card-footer">
+          <button 
+            class="complete-btn" 
+            data-tip-id="science_tip_periodic_table" 
+            onclick="markTipComplete('science', 'science_tip_periodic_table', this)">
+            <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+          </button>
+        </div>
       </div>
-      <p class="explanation">
-        <strong>G</strong>roups go <strong>U</strong>p and down (Vertical Columns).<br>
-        <strong>P</strong>eriods go <strong>H</strong>orizontally (Rows across).
-      </p>
-    </div>
 
-    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-    </button>
-  </div>
+      <!-- SCIENCE TIP 3: STATES OF MATTER -->
+      <div class="tip-card science-card">
+        <div class="card-header-flex">
+          <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
+          <span class="xp-tag">+10 XP</span>
+        </div>
 
-  <div class="card-footer">
-    <button 
-      class="complete-btn" 
-      data-tip-id="science_tip_periodic_table" 
-      onclick="markTipComplete('science', 'science_tip_periodic_table', this)">
-      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-    </button>
-  </div>
-</div>
+        <h3>Phase Changes (Sublimation & Deposition)</h3>
 
-<!-- SCIENCE TIP 3: STATES OF MATTER -->
-<div class="tip-card science-card">
-  <div class="card-header-flex">
-    <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
-    <span class="xp-tag">+10 XP</span>
-  </div>
+        <div class="interactive-prompt">
+          <p class="prompt-question"><strong>Memory Trick:</strong> How do you remember the direct skip between Solid and Gas?</p>
+          
+          <div class="tip-answer hidden">
+            <div class="mnemonic-box">
+              <span class="highlight">S.G.S</span> ➔ <strong>S</strong>olid to <strong>G</strong>as = <strong>S</strong>ublimation
+            </div>
+            <p class="explanation">
+              <strong>Sublimation:</strong> Solid ➔ Gas (e.g., Dry Ice).<br>
+              <strong>Deposition:</strong> Gas ➔ Solid (<em>Depositing</em> frost onto cold glass).
+            </p>
+          </div>
 
-  <h3>Phase Changes (Sublimation & Deposition)</h3>
+          <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+            <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+          </button>
+        </div>
 
-  <div class="interactive-prompt">
-    <p class="prompt-question"><strong>Memory Trick:</strong> How do you remember the direct skip between Solid and Gas?</p>
-    
-    <div class="tip-answer hidden">
-      <div class="mnemonic-box">
-        <span class="highlight">S.G.S</span> ➔ <strong>S</strong>olid to <strong>G</strong>as = <strong>S</strong>ublimation
+        <div class="card-footer">
+          <button 
+            class="complete-btn" 
+            data-tip-id="science_tip_states_matter" 
+            onclick="markTipComplete('science', 'science_tip_states_matter', this)">
+            <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+          </button>
+        </div>
       </div>
-      <p class="explanation">
-        <strong>Sublimation:</strong> Solid ➔ Gas (e.g., Dry Ice).<br>
-        <strong>Deposition:</strong> Gas ➔ Solid (<em>Depositing</em> frost onto cold glass).
-      </p>
-    </div>
 
-    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-    </button>
-  </div>
+      <!-- SCIENCE TIP 4: IONS & CHARGES -->
+      <div class="tip-card science-card">
+        <div class="card-header-flex">
+          <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
+          <span class="xp-tag">+10 XP</span>
+        </div>
 
-  <div class="card-footer">
-    <button 
-      class="complete-btn" 
-      data-tip-id="science_tip_states_matter" 
-      onclick="markTipComplete('science', 'science_tip_states_matter', this)">
-      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-    </button>
-  </div>
-</div>
+        <h3>Cations vs. Anions (Charge & Loss/Gain)</h3>
 
-<!-- SCIENCE TIP 4: IONS & CHARGES -->
-<div class="tip-card science-card">
-  <div class="card-header-flex">
-    <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
-    <span class="xp-tag">+10 XP</span>
-  </div>
+        <div class="interactive-prompt">
+          <p class="prompt-question"><strong>Memory Trick:</strong> How do you remember which ion is positive/negative and whether electrons are lost or gained?</p>
+          
+          <div class="tip-answer hidden">
+            <div class="mnemonic-box">
+              <span class="highlight">CA+ION</span> is <strong>Paws-itive</strong> 🐱 & <span class="highlight">A-N-I-O-N</span> = <strong>A Negative Ion</strong> 🧅
+            </div>
+            <p class="explanation">
+              <strong>Cation (+) :</strong> <u>Ca<strong>t</strong>ion</u> has a <strong>+</strong> sign. Metals <strong>LOSE</strong> electrons to become positive.<br>
+              <strong>Anion (-) :</strong> <u>A <strong>N</strong>egative <strong>I</strong>on</u>. Non-metals <strong>GAIN</strong> electrons to become negative.
+            </p>
+          </div>
 
-  <h3>Cations vs. Anions (Charge & Loss/Gain)</h3>
+          <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+            <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+          </button>
+        </div>
 
-  <div class="interactive-prompt">
-    <p class="prompt-question"><strong>Memory Trick:</strong> How do you remember which ion is positive/negative and whether electrons are lost or gained?</p>
-    
-    <div class="tip-answer hidden">
-      <div class="mnemonic-box">
-        <span class="highlight">CA+ION</span> is <strong>Paws-itive</strong> 🐱 & <span class="highlight">A-N-I-O-N</span> = <strong>A Negative Ion</strong> 🧅
+        <div class="card-footer">
+          <button 
+            class="complete-btn" 
+            data-tip-id="science_tip_ions_charges" 
+            onclick="markTipComplete('science', 'science_tip_ions_charges', this)">
+            <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+          </button>
+        </div>
       </div>
-      <p class="explanation">
-        <strong>Cation (+) :</strong> <u>Ca<strong>t</strong>ion</u> has a <strong>+</strong> sign. Metals <strong>LOSE</strong> electrons to become positive.<br>
-        <strong>Anion (-) :</strong> <u>A <strong>N</strong>egative <strong>I</strong>on</u>. Non-metals <strong>GAIN</strong> electrons to become negative.
-      </p>
     </div>
+  </main>
 
-    <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-      <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-    </button>
-  </div>
-
-  <div class="card-footer">
-    <button 
-      class="complete-btn" 
-      data-tip-id="science_tip_ions_charges" 
-      onclick="markTipComplete('science', 'science_tip_ions_charges', this)">
-      <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-    </button>
-  </div>
-</div>
-
-
-
-    <!-- Streak Lost Modal -->
+  <!-- Streak Lost Modal -->
   <div id="streak-modal" class="modal-overlay hidden">
     <div class="modal-card">
       <div class="modal-icon">💔</div>
@@ -457,51 +460,40 @@
       <button id="close-modal-btn" class="modal-btn">Let's Go!</button>
     </div>
   </div>
+
   <!-- Translate Toggle Button -->
   <button id="translate-btn" class="notranslate" translate="no" onclick="toggleLanguage()">
     🌐 Switch to Malay
   </button>
+
   <!-- External Google Translate Script -->
   <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    <!-- Floating Pomodoro Widget -->
-<div class="pomodoro-widget" id="pomodoro-widget">
-  <!-- Widget Header / Toggle Button -->
-  <button class="widget-toggle" onclick="toggleWidget()">
-    <i class="fa-solid fa-stopwatch"></i>
-    <span id="widget-min-display">25:00</span>
-  </button>
 
-  <!-- Expanded Widget Card -->
-  <div class="widget-card hidden" id="widget-card">
-    <div class="pomodoro-header">
+  <!-- Floating Pomodoro Widget -->
+  <div class="pomodoro-widget" id="pomodoro-widget">
+    <button class="widget-toggle" onclick="toggleWidget()">
       <i class="fa-solid fa-stopwatch"></i>
-      <span>Focus Timer</span>
+      <span id="widget-min-display">25:00</span>
+    </button>
+
+    <div class="widget-card hidden" id="widget-card">
+      <div class="pomodoro-header">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span>Focus Timer</span>
+      </div>
+      
+      <div class="timer-display" id="timer-display">25:00</div>
+      
+      <div class="timer-controls">
+        <button id="start-btn" onclick="startTimer()">Start</button>
+        <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
+        <button id="reset-btn" onclick="resetTimer()">Reset</button>
+      </div>
+      
+      <p class="timer-status" id="timer-status">Ready to study?</p>
     </div>
-    
-    <div class="timer-display" id="timer-display">25:00</div>
-    
-    <div class="timer-controls">
-      <button id="start-btn" onclick="startTimer()">Start</button>
-      <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
-      <button id="reset-btn" onclick="resetTimer()">Reset</button>
-    </div>
-    
-    <p class="timer-status" id="timer-status">Ready to study?</p>
   </div>
-</div>
-<script>
-  function toggleTipAnswer(btnElement) {
-  const answerBox = btnElement.previousElementSibling;
-  
-  if (answerBox.classList.contains('hidden')) {
-    answerBox.classList.remove('hidden');
-    btnElement.innerHTML = `<i class="fa-solid fa-eye-slash"></i> Hide Memory Trick`;
-  } else {
-    answerBox.classList.add('hidden');
-    btnElement.innerHTML = `<i class="fa-solid fa-eye"></i> Reveal Memory Trick`;
-  }
-}
-</script>
+
   <div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
     <audio id="focus-audio" preload="metadata"></audio>
 
@@ -564,5 +556,68 @@
       </div>
     </div>
   </div>
+
+  <script>
+    function toggleTipAnswer(btnElement) {
+      const answerBox = btnElement.previousElementSibling;
+      
+      if (answerBox.classList.contains('hidden')) {
+        answerBox.classList.remove('hidden');
+        btnElement.innerHTML = `<i class="fa-solid fa-eye-slash"></i> Hide Memory Trick`;
+      } else {
+        answerBox.classList.add('hidden');
+        btnElement.innerHTML = `<i class="fa-solid fa-eye"></i> Reveal Memory Trick`;
+      }
+    }
+
+    // Supabase Dynamic Data Fetcher (Connected to admin.html)
+    const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function fetchSupabaseTips() {
+      const tipsContainer = document.getElementById('tips-container');
+
+      const { data: tips, error } = await supabaseClient
+        .from('tips')
+        .select('*')
+        .eq('subject', 'science')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching dynamic tips:', error.message);
+        return;
+      }
+
+      tips.forEach((tip) => {
+        const card = document.createElement('div');
+        card.className = 'tip-card science-card';
+        card.innerHTML = `
+          <div class="card-header-flex">
+            <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
+            <span class="xp-tag">+10 XP</span>
+          </div>
+          <h3>${tip.title}</h3>
+          <div class="interactive-prompt">
+            <div class="tip-answer hidden">
+              <p class="explanation">${tip.content}</p>
+            </div>
+            <button class="reveal-btn" onclick="toggleTipAnswer(this)">
+              <i class="fa-solid fa-eye"></i> Reveal Memory Trick
+            </button>
+          </div>
+          <div class="card-footer">
+            <button class="complete-btn" onclick="markTipComplete('science', 'tip-db-${tip.id}', this)">
+              <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
+            </button>
+          </div>
+        `;
+        tipsContainer.appendChild(card);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchSupabaseTips);
+  </script>
 </body>
 </html>
