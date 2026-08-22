@@ -15,7 +15,7 @@
     .hidden { display: none !important; }
     .form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
     input, select, textarea { padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; }
-    button { background: #d97706; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    button { background: #d97706; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
     button:hover { background: #b45309; }
     button:disabled { background: #9ca3af; cursor: not-allowed; }
     .status-msg { margin-top: 10px; font-weight: bold; }
@@ -41,10 +41,10 @@
       <div class="form-group">
         <label for="tip-subject">Subject Category</label>
         <select id="tip-subject" required>
-          <option value="BM">Bahasa Melayu</option>
-          <option value="English">English</option>
-          <option value="Math">Mathematics</option>
-          <option value="Science">Science</option>
+          <option value="bm">Bahasa Melayu</option>
+          <option value="english">English</option>
+          <option value="math">Mathematics</option>
+          <option value="science">Science</option>
         </select>
       </div>
 
@@ -66,19 +66,30 @@
   <script>
     // Initialize Supabase Client
     const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1ZmRuendwcm9qaHJuZmJodmhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU1NDg1NTYsImV4cCI6MjEwMTEyNDU1Nn0.pqAFoGdEnXO5OH78UlPQlWZKUWSz3KDZOllWGaoD64s";
+    const SUPABASE_ANON_KEY = "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
     
-    // Global client instance assigned to 'supabaseClient' to avoid variable shadowing with window.supabase
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // Simple client-side passphrase protection
     const ACCESS_CODE = "tahu123";
 
+    // Auto-login if session exists
+    document.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('teacher_auth') === 'true') {
+        showEditor();
+      }
+    });
+
+    function showEditor() {
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('editor-section').classList.remove('hidden');
+    }
+
     function checkPassphrase() {
       const input = document.getElementById('admin-pass').value;
       if (input === ACCESS_CODE) {
-        document.getElementById('login-section').classList.add('hidden');
-        document.getElementById('editor-section').classList.remove('hidden');
+        sessionStorage.setItem('teacher_auth', 'true');
+        showEditor();
       } else {
         document.getElementById('login-err').textContent = "Incorrect code! Access denied.";
       }
@@ -93,11 +104,11 @@
       // UI Feedback: Pending
       submitBtn.disabled = true;
       status.style.color = "#d97706";
-      status.textContent = "Publishing...";
+      status.textContent = "Publishing to cloud database...";
 
       const subject = document.getElementById('tip-subject').value;
-      const title = document.getElementById('tip-title').value;
-      const content = document.getElementById('tip-content').value;
+      const title = document.getElementById('tip-title').value.trim();
+      const content = document.getElementById('tip-content').value.trim();
 
       // Insert record into Supabase 'tips' table
       const { data, error } = await supabaseClient
@@ -108,10 +119,10 @@
 
       if (error) {
         status.style.color = "#ef4444";
-        status.textContent = "Error publishing: " + error.message;
+        status.textContent = "Publishing failed: " + error.message;
       } else {
         status.style.color = "#16a34a";
-        status.textContent = "Published successfully!";
+        status.textContent = "Published successfully! Available to all students.";
         document.getElementById('tip-form').reset();
       }
     }
