@@ -529,7 +529,8 @@ const tracks = [
   { title: "Saria's Song", src: "saria.mp3" },
   { title: "Song Of Healing", src: "healing.mp3" },
   { title: "Great Fairy Fountain", src: "great.mp3" },
-  { title: "Mipha Theme", src: "mipha.mp3" }
+  { title: "Mipha Theme", src: "mipha.mp3" },
+  { title: "Best Friends", src: "Best Friends.mp3" },
 ];
 
 let currentTrackIndex = parseInt(localStorage.getItem("music_track_index")) || 0;
