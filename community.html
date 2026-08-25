@@ -1,870 +1,932 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tahu - Student Community</title>
-<link rel="shortcut icon" href="icon.png" type="image/x-icon">
-
-<!-- Google Font & Font Awesome Icons -->
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="style.css">
-
-<!-- Supabase JS Client Library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-* {
-box-sizing: border-box;
-font-family: 'Quicksand', sans-serif;
-}
-
-body {
-background-color: #fdfbf7;
-color: #334155;
-margin: 0;
-padding: 16px;
-}
-
-/* Clean Header Navbar Styles - No white card background */
-header {
-background: transparent;
-box-shadow: none;
-border-radius: 0;
-margin-bottom: 16px;
-padding: 8px 4px;
-}
-
-.navbar {
-  background: transparent;
-display: flex;
-align-items: center;
-justify-content: space-between;
-}
-
-.logo {
-display: flex;
-align-items: center;
-gap: 12px;
-background-color:none;
-}
-
-.nav-logo {
-width: 32px;
-height: 32px;
-}
-
-.logo a {
-text-decoration: none;
-font-weight: 700;
-font-size: 1.3rem;
-color: #1e293b;
-}
-
-/* Hamburger Toggle Button at top left */
-.menu-toggle {
-display: none;
-background: none;
-border: 1px solid #e2e8f0;
-font-size: 1.3rem;
-color: #334155;
-cursor: pointer;
-padding: 8px 12px;
-border-radius: 10px;
-box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-transition: background 0.2s, transform 0.1s;
-}
-
-.menu-toggle:active {
-transform: scale(0.95);
-}
-
-/* Desktop Navigation Links */
-.nav-links {
-display: flex;
-align-items: center;
-gap: 12px;
-}
-
-.streak-badge {
-display: flex;
-align-items: center;
-gap: 6px;
-background: #fffbe3;
-border: 1px solid #fde68a;
-color: #d97706;
-padding: 6px 12px;
-border-radius: 20px;
-font-weight: 700;
-font-size: 0.85rem;
-}
-
-.nav-btn {
-text-decoration: none;
-color: #64748b;
-font-weight: 600;
-padding: 8px 14px;
-border-radius: 10px;
-transition: all 0.2s ease;
-}
-
-.nav-btn:hover, .nav-btn.active {
-color: #f59e0b;
-background: #fef3c7;
-}
-
-
-/* Sidebar Overlay */
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(15, 23, 42, 0.4);
-  backdrop-filter: blur(2px);
-  z-index: 9998;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.sidebar-overlay.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-/* Mobile Slide-Out Sidebar Panel - Completely hidden off-screen by default */
-/* Single Sidebar Container - Off-screen by default */
-.sidebar-container {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 260px !important;
-  height: 100vh !important;
-  background-color: #ffffff !important;
-  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-  z-index: 9999 !important;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  
-  /* Slide completely off-screen left */
-  transform: translateX(-100%) !important;
-  visibility: hidden !important;
-  transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out !important;
-}
-
-/* Slides in ONLY when active */
-.sidebar-container.active {
-  transform: translateX(0) !important;
-  visibility: visible !important;
-}
-
-.sidebar-header {
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding-bottom: 12px;
-border-bottom: 1px solid #f1f5f9;
-}
-
-.sidebar-close-btn {
-background: none;
-border: none;
-font-size: 1.2rem;
-color: #64748b;
-cursor: pointer;
-padding: 4px 8px;
-border-radius: 6px;
-}
-
-.sidebar-close-btn:hover {
-background: #f1f5f9;
-color: #ef4444;
-}
-
-/* Container */
-.community-container {
-width: 100%;
-max-width: 720px;
-margin: 0 auto;
-}
-
-/* Header & Create Post Trigger */
-.community-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 20px;
-flex-wrap: wrap;
-gap: 12px;
-}
-
-.community-header h2 {
-font-size: 1.4rem;
-margin: 0;
-color: #1e293b;
-}
-
-.btn-primary {
-background-color: #f59e0b;
-color: #ffffff;
-border: none;
-padding: 10px 18px;
-border-radius: 20px;
-font-weight: 700;
-font-size: 0.9rem;
-cursor: pointer;
-transition: background 0.2s ease, transform 0.1s ease;
-display: inline-flex;
-align-items: center;
-justify-content: center;
-}
-
-.btn-primary:hover {
-background-color: #d97706;
-transform: translateY(-1px);
-}
-
-/* Create Post Card / Form */
-.create-post-card {
-background: #ffffff;
-border: 1px solid #f1f5f9;
-border-radius: 16px;
-padding: 16px;
-margin-bottom: 24px;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-}
-
-.create-post-card h3 {
-margin-top: 0;
-font-size: 1.1rem;
-color: #334155;
-}
-
-.form-group {
-margin-bottom: 12px;
-}
-
-.form-control {
-width: 100%;
-padding: 10px 14px;
-border: 1.5px solid #e2e8f0;
-border-radius: 10px;
-font-size: 0.95rem;
-outline: none;
-transition: border-color 0.2s;
-}
-
-.form-control:focus {
-border-color: #f59e0b;
-}
-
-textarea.form-control {
-resize: vertical;
-min-height: 80px;
-}
-
-/* Feed & Post Cards */
-.posts-feed {
-display: flex;
-flex-direction: column;
-gap: 16px;
-}
-
-.post-card {
-background: #ffffff;
-border: 1px solid #f1f5f9;
-border-radius: 16px;
-padding: 16px;
-display: flex;
-gap: 16px;
-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-transition: transform 0.15s ease;
-}
-
-.post-card:hover {
-transform: translateY(-2px);
-}
-
-/* Upvote Sidebar */
-.vote-box {
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 4px;
-}
-
-.vote-btn {
-background: #f8fafc;
-border: 1px solid #e2e8f0;
-border-radius: 8px;
-width: 36px;
-height: 36px;
-cursor: pointer;
-color: #64748b;
-font-size: 1rem;
-transition: all 0.2s;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-
-.vote-btn:hover {
-background: #fef3c7;
-color: #d97706;
-border-color: #fde68a;
-}
-
-.vote-btn.voted {
-background: #fef3c7;
-color: #d97706;
-border-color: #f59e0b;
-}
-
-.vote-count {
-font-weight: 700;
-font-size: 0.95rem;
-color: #334155;
-}
-
-/* Main Post Details */
-.post-main {
-flex: 1;
-min-width: 0;
-}
-
-.post-meta {
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin-bottom: 8px;
-flex-wrap: wrap;
-gap: 6px;
-}
-
-.post-meta-left {
-display: flex;
-align-items: center;
-gap: 6px;
-flex-wrap: wrap;
-}
-
-.badge-tag {
-background: #fef3c7;
-color: #b45309;
-font-size: 0.75rem;
-font-weight: 700;
-padding: 4px 10px;
-border-radius: 12px;
-text-transform: uppercase;
-}
-
-.post-author {
-font-size: 0.85rem;
-color: #64748b;
-word-break: break-word;
-}
-
-.delete-btn {
-background: none;
-border: none;
-color: #94a3b8;
-cursor: pointer;
-font-size: 0.9rem;
-padding: 4px 8px;
-border-radius: 6px;
-transition: color 0.2s, background 0.2s;
-}
-
-.delete-btn:hover {
-color: #ef4444;
-background: #fef2f2;
-}
-
-.post-title {
-margin: 0 0 6px 0;
-font-size: 1.1rem;
-color: #1e293b;
-word-break: break-word;
-}
-
-.post-body {
-margin: 0 0 12px 0;
-font-size: 0.92rem;
-color: #475569;
-line-height: 1.5;
-word-break: break-word;
-}
-
-.comment-toggle-btn {
-background: none;
-border: none;
-color: #64748b;
-font-weight: 700;
-font-size: 0.85rem;
-cursor: pointer;
-display: inline-flex;
-align-items: center;
-gap: 6px;
-padding: 6px 10px;
-border-radius: 8px;
-transition: background 0.2s, color 0.2s;
-}
-
-.comment-toggle-btn:hover {
-background: #f1f5f9;
-color: #f59e0b;
-}
-
-/* Comments Section */
-.comments-section {
-margin-top: 14px;
-padding-top: 12px;
-border-top: 1px solid #f1f5f9;
-display: none;
-}
-
-.comments-section.open {
-display: block;
-}
-
-.comments-list {
-display: flex;
-flex-direction: column;
-gap: 10px;
-margin-bottom: 12px;
-}
-
-.comment-item {
-background: #f8fafc;
-padding: 10px 12px;
-border-radius: 10px;
-font-size: 0.88rem;
-}
-
-.comment-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 4px;
-}
-
-.comment-author {
-font-weight: 700;
-color: #1e293b;
-word-break: break-word;
-}
-
-.comment-text {
-margin: 0;
-color: #475569;
-word-break: break-word;
-}
-
-.comment-form {
-display: flex;
-flex-direction: column;
-gap: 8px;
-}
-
-.comment-form-row {
-display: flex;
-gap: 8px;
-flex-direction: column;
-}
-
-.comment-form input {
-padding: 8px 12px;
-font-size: 0.85rem;
-}
-
-.empty-state {
-text-align: center;
-padding: 30px 15px;
-color: #94a3b8;
-}
-
-/* Custom Toast Popup */
-.toast {
-position: fixed;
-bottom: 20px;
-right: 20px;
-left: 20px;
-max-width: 400px;
-margin-left: auto;
-background-color: #ffffff;
-color: #334155;
-border-left: 5px solid #f59e0b;
-padding: 12px 16px;
-border-radius: 12px;
-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-display: flex;
-align-items: center;
-gap: 12px;
-font-weight: 600;
-font-size: 0.9rem;
-z-index: 9999;
-opacity: 0;
-transform: translateY(20px);
-pointer-events: none;
-transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-}
-
-.toast i {
-color: #f59e0b;
-font-size: 1.2rem;
-}
-
-.toast.show {
-opacity: 1;
-transform: translateY(0);
-pointer-events: auto;
-}
-
-/* Custom Confirmation Modal */
-.modal-overlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background: rgba(15, 23, 42, 0.4);
-backdrop-filter: blur(4px);
-display: flex;
-align-items: center;
-justify-content: center;
-padding: 16px;
-z-index: 10000;
-opacity: 0;
-pointer-events: none;
-transition: opacity 0.2s ease;
-}
-
-.modal-overlay.show {
-opacity: 1;
-pointer-events: auto;
-}
-
-.modal-box {
-background: #ffffff;
-border-radius: 20px;
-padding: 20px;
-width: 100%;
-max-width: 380px;
-text-align: center;
-box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-transform: scale(0.95);
-transition: transform 0.2s ease;
-}
-
-.modal-overlay.show .modal-box {
-transform: scale(1);
-}
-
-.modal-icon {
-width: 44px;
-height: 44px;
-background: #fef2f2;
-color: #ef4444;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-margin: 0 auto 12px;
-font-size: 1.15rem;
-}
-
-.modal-box h3 {
-margin: 0 0 8px;
-color: #1e293b;
-font-size: 1.15rem;
-}
-
-.modal-box p {
-margin: 0 0 20px;
-color: #64748b;
-font-size: 0.88rem;
-line-height: 1.4;
-}
-
-.modal-actions {
-display: flex;
-gap: 10px;
-}
-
-.modal-actions button {
-flex: 1;
-padding: 10px;
-border-radius: 12px;
-font-weight: 700;
-font-size: 0.9rem;
-cursor: pointer;
-border: none;
-transition: all 0.2s ease;
-}
-
-.btn-cancel {
-background: #f1f5f9;
-color: #64748b;
-}
-
-.btn-cancel:hover {
-background: #e2e8f0;
-}
-
-.btn-delete {
-background: #ef4444;
-color: #ffffff;
-}
-
-.btn-delete:hover {
-background: #dc2626;
-}
-
-/* RESPONSIVE MEDIA QUERIES */
-@media (max-width: 768px) {
-.menu-toggle {
-display: inline-block;
-}
-
-/* Hide inline header nav-links on mobile */
-.nav-links {
-display: none;
-}
-}
-
-@media (min-width: 480px) {
-.comment-form-row {
-flex-direction: row;
-}
-body {
-padding: 24px;
-}
-.toast {
-left: auto;
-right: 30px;
-bottom: 30px;
-}
-}
-
-@media (max-width: 600px) {
-.post-card {
-flex-direction: column-reverse;
-gap: 12px;
-}
-
-.vote-box {
-flex-direction: row;
-justify-content: flex-start;
-align-items: center;
-gap: 8px;
-padding-top: 8px;
-border-top: 1px solid #f1f5f9;
-}
-
-.vote-btn {
-width: 32px;
-height: 32px;
-font-size: 0.85rem;
-}
-
-.community-header h2 {
-font-size: 1.25rem;
-}
-
-.create-post-card {
-padding: 14px;
-}
-}
-</style>
-</head>
-<body>
-
-<!-- Top Clean Navigation Header (No White Background Box) -->
-<header>
-<nav class="navbar" >
-<div class="logo">
-<!-- Clean standalone Hamburger Button at Top Left -->
-<button class="menu-toggle" id="open-sidebar-btn" aria-label="Open Sidebar">
-<i class="fa-solid fa-bars"></i>
-</button>
-<img src="icon.png" alt="Logo" class="nav-logo">
-<a href="index.html"><span>Tahu</span></a>
-</div>
-
-<!-- Desktop Links -->
-<div class="nav-links">
-<div class="streak-badge">
-<i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count">1 Day</span>
-</div>
-<a href="index.html" class="nav-btn">Home</a>
-<a href="tips.html" class="nav-btn">Tips</a>
-<a href="learn.html" class="nav-btn">Aid</a>
-<a href="quiz.html" class="nav-btn">Quiz</a>
-<a href="community.html" class="nav-btn active">Community</a>
-</div>
-</nav>
-</header>
-
-<!-- Mobile Slide-Out Sidebar Panel & Overlay -->
-<div class="sidebar-overlay" id="sidebar-overlay"></div>
-<aside class="sidebar-container" id="single-sidebar">
-<div class="sidebar-header">
-<div class="logo">
-<img src="icon.png" alt="Logo" class="nav-logo">
-<a href="index.html"><span>Tahu</span></a>
-</div>
-<button class="sidebar-close-btn" id="close-sidebar-btn" aria-label="Close Sidebar">
-<i class="fa-solid fa-xmark"></i>
-</button>
-</div>
-
-<div class="streak-badge">
-<i class="fa-solid fa-fire streak-icon"></i> <span id="streak-count-mobile">1 Day</span>
-</div>
-
-<a href="index.html" class="nav-btn">Home</a>
-<a href="tips.html" class="nav-btn">Tips</a>
-<a href="learn.html" class="nav-btn">Aid</a>
-<a href="quiz.html" class="nav-btn">Quiz</a>
-<a href="community.html" class="nav-btn active">Community</a>
-</aside>
-
-<div class="community-container" style="margin-top: 60px;">
-<div class="community-header">
-<h2><i class="fa-solid fa-comments"></i> Student Discussions</h2>
-<button class="btn-primary" onclick="toggleForm()">+ New Post</button>
-</div>
-
-<!-- Create Post Form -->
-<div class="create-post-card" id="post-form-card" style="display: none;">
-<h3>Share a Study Tip or Question</h3>
-<form id="create-post-form">
-<div class="form-group">
-<input type="text" id="post-username" class="form-control" placeholder="Your Name or Alias" required>
-</div>
-<div class="form-group">
-<select id="post-category" class="form-control" required>
-<option value="General">General Study Tip</option>
-<option value="BM">Bahasa Melayu</option>
-<option value="Math">Mathematics</option>
-<option value="Science">Science</option>
-<option value="English">English</option>
-</select>
-</div>
-<div class="form-group">
-<input type="text" id="post-title" class="form-control" placeholder="Post Title" required>
-</div>
-<div class="form-group">
-<textarea id="post-content" class="form-control" placeholder="What's on your mind?" required></textarea>
-</div>
-<button type="submit" class="btn-primary" style="width: 100%;">Publish Post</button>
-</form>
-</div>
-
-<!-- Feed Container -->
-<div class="posts-feed" id="posts-feed">
-<div class="empty-state">Loading discussions...</div>
-</div>
-</div>
-
-<!-- Custom Delete Confirmation Modal -->
-<div id="confirm-modal" class="modal-overlay">
-<div class="modal-box">
-<div class="modal-icon">
-<i class="fa-solid fa-triangle-exclamation"></i>
-</div>
-<h3>Delete Confirmation</h3>
-<p>Are you sure you want to proceed? This action cannot be undone.</p>
-<div class="modal-actions">
-<button class="btn-cancel" onclick="closeConfirmModal(false)">Cancel</button>
-<button class="btn-delete" onclick="closeConfirmModal(true)">Delete</button>
-</div>
-</div>
-</div>
-
-<!-- Custom Toast Notification Container -->
-<div id="toast-notification" class="toast">
-<i class="fa-solid fa-circle-info"></i>
-<span id="toast-message">Notification message here</span>
-</div>
-
-<script>
-// Single Sidebar Toggle Elements
-const openSidebarBtn = document.getElementById('open-sidebar-btn');
-const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-const singleSidebar = document.getElementById('single-sidebar');
-const sidebarOverlay = document.getElementById('sidebar-overlay');
-
-function openSidebar() {
-singleSidebar.classList.add('active');
-sidebarOverlay.classList.add('active');
-}
-
-function closeSidebar() {
-singleSidebar.classList.remove('active');
-sidebarOverlay.classList.remove('active');
-}
-
-openSidebarBtn.addEventListener('click', openSidebar);
-closeSidebarBtn.addEventListener('click', closeSidebar);
-sidebarOverlay.addEventListener('click', closeSidebar);
-
-// Initialize Supabase Client
-const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
-
-const { createClient } = supabase;
-const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-function showToast(message) {
-const toast = document.getElementById("toast-notification");
-const toastMessage = document.getElementById("toast-message");
-
-toastMessage.textContent = message;
-toast.classList.add("show");
-
-setTimeout(() => {
-toast.classList.remove("show");
-}, 3000);
-}
-
-async function loadPosts() {
-const feedEl = document.getElementById("posts-feed");
-const upvotedPosts = JSON.parse(localStorage.getItem('upvotedPosts') || '[]');
-
-let { data: posts, error } = await db
-.from("posts")
-.select("*, comments(*)")
-.order("created_at", { ascending: false });
-
-if (error) {
-console.warn("Relational query failed, attempting fallback...", error);
-const fallback = await db.from("posts").select("*").order("created_at", { ascending: false });
-
-if (fallback.error) {
-console.error("Error fetching posts:", fallback.error);
-feedEl.innerHTML = `<div class="empty-state">Error loading posts. Please try again later.</div>`;
-return;
-}
-posts = fallback.data.map(p => ({ ...p, comments: [] }));
-}
-
-if (!posts || posts.length === 0) {
-feedEl.innerHTML = `<div class="empty-state">No discussions yet. Be the first to share!</div>`;
-return;
-}
-
-feedEl.innerHTML = posts.map(post => {
-const isVoted = upvotedPosts.includes(post.id);
-const commentList = post.comments || [];
-const commentCount = commentList.length;
-
-const commentsMarkup = commentList.map(c => `
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tahu - Student Community</title>
+    <link rel="shortcut icon" href="icon.png" type="image/x-icon" />
+
+    <!-- Google Font & Font Awesome Icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Supabase JS Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Quicksand", sans-serif;
+      }
+
+      body {
+        background-color: #fdfbf7;
+        color: #334155;
+        margin: 0;
+        padding: 16px;
+      }
+
+      /* Clean Header Navbar Styles - No white card background */
+      header {
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+        margin-bottom: 16px;
+        padding: 8px 4px;
+      }
+
+      .navbar {
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background-color: none;
+      }
+
+      .nav-logo {
+        width: 32px;
+        height: 32px;
+      }
+
+      .logo a {
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.3rem;
+        color: #1e293b;
+      }
+
+      /* Hamburger Toggle Button at top left */
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: 1px solid #e2e8f0;
+        font-size: 1.3rem;
+        color: #334155;
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition:
+          background 0.2s,
+          transform 0.1s;
+      }
+
+      .menu-toggle:active {
+        transform: scale(0.95);
+      }
+
+      /* Desktop Navigation Links */
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .streak-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: #fffbe3;
+        border: 1px solid #fde68a;
+        color: #d97706;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+
+      .nav-btn {
+        text-decoration: none;
+        color: #64748b;
+        font-weight: 600;
+        padding: 8px 14px;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+      }
+
+      .nav-btn:hover,
+      .nav-btn.active {
+        color: #f59e0b;
+        background: #fef3c7;
+      }
+
+      /* Sidebar Overlay */
+      .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(2px);
+        z-index: 9998;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition:
+          opacity 0.3s ease,
+          visibility 0.3s ease;
+      }
+      .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+      /* Mobile Slide-Out Sidebar Panel - Completely hidden off-screen by default */
+      /* Single Sidebar Container - Off-screen by default */
+      .sidebar-container {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 260px !important;
+        height: 100vh !important;
+        background-color: #ffffff !important;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+        z-index: 9999 !important;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        /* Slide completely off-screen left */
+        transform: translateX(-100%) !important;
+        visibility: hidden !important;
+        transition:
+          transform 0.3s ease-in-out,
+          visibility 0.3s ease-in-out !important;
+      }
+
+      /* Slides in ONLY when active */
+      .sidebar-container.active {
+        transform: translateX(0) !important;
+        visibility: visible !important;
+      }
+
+      .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .sidebar-close-btn {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: #64748b;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+
+      .sidebar-close-btn:hover {
+        background: #f1f5f9;
+        color: #ef4444;
+      }
+
+      /* Container */
+      .community-container {
+        width: 100%;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+
+      /* Header & Create Post Trigger */
+      .community-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .community-header h2 {
+        font-size: 1.4rem;
+        margin: 0;
+        color: #1e293b;
+      }
+
+      .btn-primary {
+        background-color: #f59e0b;
+        color: #ffffff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition:
+          background 0.2s ease,
+          transform 0.1s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-primary:hover {
+        background-color: #d97706;
+        transform: translateY(-1px);
+      }
+
+      /* Create Post Card / Form */
+      .create-post-card {
+        background: #ffffff;
+        border: 1px solid #f1f5f9;
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      }
+
+      .create-post-card h3 {
+        margin-top: 0;
+        font-size: 1.1rem;
+        color: #334155;
+      }
+
+      .form-group {
+        margin-bottom: 12px;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .form-control:focus {
+        border-color: #f59e0b;
+      }
+
+      textarea.form-control {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      /* Feed & Post Cards */
+      .posts-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .post-card {
+        background: #ffffff;
+        border: 1px solid #f1f5f9;
+        border-radius: 16px;
+        padding: 16px;
+        display: flex;
+        gap: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        transition: transform 0.15s ease;
+      }
+
+      .post-card:hover {
+        transform: translateY(-2px);
+      }
+
+      /* Upvote Sidebar */
+      .vote-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .vote-btn {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        color: #64748b;
+        font-size: 1rem;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .vote-btn:hover {
+        background: #fef3c7;
+        color: #d97706;
+        border-color: #fde68a;
+      }
+
+      .vote-btn.voted {
+        background: #fef3c7;
+        color: #d97706;
+        border-color: #f59e0b;
+      }
+
+      .vote-count {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #334155;
+      }
+
+      /* Main Post Details */
+      .post-main {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .post-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .post-meta-left {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .badge-tag {
+        background: #fef3c7;
+        color: #b45309;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 12px;
+        text-transform: uppercase;
+      }
+
+      .post-author {
+        font-size: 0.85rem;
+        color: #64748b;
+        word-break: break-word;
+      }
+
+      .delete-btn {
+        background: none;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition:
+          color 0.2s,
+          background 0.2s;
+      }
+
+      .delete-btn:hover {
+        color: #ef4444;
+        background: #fef2f2;
+      }
+
+      .post-title {
+        margin: 0 0 6px 0;
+        font-size: 1.1rem;
+        color: #1e293b;
+        word-break: break-word;
+      }
+
+      .post-body {
+        margin: 0 0 12px 0;
+        font-size: 0.92rem;
+        color: #475569;
+        line-height: 1.5;
+        word-break: break-word;
+      }
+
+      .comment-toggle-btn {
+        background: none;
+        border: none;
+        color: #64748b;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+
+      .comment-toggle-btn:hover {
+        background: #f1f5f9;
+        color: #f59e0b;
+      }
+
+      /* Comments Section */
+      .comments-section {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid #f1f5f9;
+        display: none;
+      }
+
+      .comments-section.open {
+        display: block;
+      }
+
+      .comments-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .comment-item {
+        background: #f8fafc;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 0.88rem;
+      }
+
+      .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+
+      .comment-author {
+        font-weight: 700;
+        color: #1e293b;
+        word-break: break-word;
+      }
+
+      .comment-text {
+        margin: 0;
+        color: #475569;
+        word-break: break-word;
+      }
+
+      .comment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .comment-form-row {
+        display: flex;
+        gap: 8px;
+        flex-direction: column;
+      }
+
+      .comment-form input {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 30px 15px;
+        color: #94a3b8;
+      }
+
+      /* Custom Toast Popup */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        max-width: 400px;
+        margin-left: auto;
+        background-color: #ffffff;
+        color: #334155;
+        border-left: 5px solid #f59e0b;
+        padding: 12px 16px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        z-index: 9999;
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      }
+
+      .toast i {
+        color: #f59e0b;
+        font-size: 1.2rem;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      /* Custom Confirmation Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        z-index: 10000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+      }
+
+      .modal-overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .modal-box {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 20px;
+        width: 100%;
+        max-width: 380px;
+        text-align: center;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        transform: scale(0.95);
+        transition: transform 0.2s ease;
+      }
+
+      .modal-overlay.show .modal-box {
+        transform: scale(1);
+      }
+
+      .modal-icon {
+        width: 44px;
+        height: 44px;
+        background: #fef2f2;
+        color: #ef4444;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        font-size: 1.15rem;
+      }
+
+      .modal-box h3 {
+        margin: 0 0 8px;
+        color: #1e293b;
+        font-size: 1.15rem;
+      }
+
+      .modal-box p {
+        margin: 0 0 20px;
+        color: #64748b;
+        font-size: 0.88rem;
+        line-height: 1.4;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .modal-actions button {
+        flex: 1;
+        padding: 10px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+      }
+
+      .btn-cancel {
+        background: #f1f5f9;
+        color: #64748b;
+      }
+
+      .btn-cancel:hover {
+        background: #e2e8f0;
+      }
+
+      .btn-delete {
+        background: #ef4444;
+        color: #ffffff;
+      }
+
+      .btn-delete:hover {
+        background: #dc2626;
+      }
+
+      /* RESPONSIVE MEDIA QUERIES */
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: inline-block;
+        }
+
+        /* Hide inline header nav-links on mobile */
+        .nav-links {
+          display: none;
+        }
+      }
+
+      @media (min-width: 480px) {
+        .comment-form-row {
+          flex-direction: row;
+        }
+        body {
+          padding: 24px;
+        }
+        .toast {
+          left: auto;
+          right: 30px;
+          bottom: 30px;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .post-card {
+          flex-direction: column-reverse;
+          gap: 12px;
+        }
+
+        .vote-box {
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 8px;
+          padding-top: 8px;
+          border-top: 1px solid #f1f5f9;
+        }
+
+        .vote-btn {
+          width: 32px;
+          height: 32px;
+          font-size: 0.85rem;
+        }
+
+        .community-header h2 {
+          font-size: 1.25rem;
+        }
+
+        .create-post-card {
+          padding: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Clean Navigation Header (No White Background Box) -->
+    <header>
+      <nav class="navbar">
+        <div class="logo">
+          <!-- Clean standalone Hamburger Button at Top Left -->
+          <button
+            class="menu-toggle"
+            id="open-sidebar-btn"
+            aria-label="Open Sidebar"
+          >
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <img src="icon.png" alt="Logo" class="nav-logo" />
+          <a href="index.html"><span>Tahu</span></a>
+        </div>
+
+        <!-- Desktop Links -->
+        <div class="nav-links">
+          <div class="streak-badge">
+            <i class="fa-solid fa-fire streak-icon"></i>
+            <span id="streak-count">1 Day</span>
+          </div>
+          <a href="index.html" class="nav-btn">Home</a>
+          <a href="tips.html" class="nav-btn">Tips</a>
+          <a href="learn.html" class="nav-btn">Aid</a>
+          <a href="quiz.html" class="nav-btn">Quiz</a>
+          <a href="community.html" class="nav-btn active">Community</a>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Mobile Slide-Out Sidebar Panel & Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar-container" id="single-sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <img src="icon.png" alt="Logo" class="nav-logo" />
+          <a href="index.html"><span>Tahu</span></a>
+        </div>
+        <button
+          class="sidebar-close-btn"
+          id="close-sidebar-btn"
+          aria-label="Close Sidebar"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="streak-badge">
+        <i class="fa-solid fa-fire streak-icon"></i>
+        <span id="streak-count-mobile">1 Day</span>
+      </div>
+
+      <a href="index.html" class="nav-btn">Home</a>
+      <a href="tips.html" class="nav-btn">Tips</a>
+      <a href="learn.html" class="nav-btn">Aid</a>
+      <a href="quiz.html" class="nav-btn">Quiz</a>
+      <a href="community.html" class="nav-btn active">Community</a>
+    </aside>
+
+    <div class="community-container" style="margin-top: 60px">
+      <div class="community-header">
+        <h2><i class="fa-solid fa-comments"></i> Student Discussions</h2>
+        <button class="btn-primary" onclick="toggleForm()">+ New Post</button>
+      </div>
+
+      <!-- Create Post Form -->
+      <div class="create-post-card" id="post-form-card" style="display: none">
+        <h3>Share a Study Tip or Question</h3>
+        <form id="create-post-form">
+          <div class="form-group">
+            <input
+              type="text"
+              id="post-username"
+              class="form-control"
+              placeholder="Your Name or Alias"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <select id="post-category" class="form-control" required>
+              <option value="General">General Study Tip</option>
+              <option value="BM">Bahasa Melayu</option>
+              <option value="Math">Mathematics</option>
+              <option value="Science">Science</option>
+              <option value="English">English</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              id="post-title"
+              class="form-control"
+              placeholder="Post Title"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <textarea
+              id="post-content"
+              class="form-control"
+              placeholder="What's on your mind?"
+              required
+            ></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width: 100%">
+            Publish Post
+          </button>
+        </form>
+      </div>
+
+      <!-- Feed Container -->
+      <div class="posts-feed" id="posts-feed">
+        <div class="empty-state">Loading discussions...</div>
+      </div>
+    </div>
+
+    <!-- Custom Delete Confirmation Modal -->
+    <div id="confirm-modal" class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h3>Delete Confirmation</h3>
+        <p>Are you sure you want to proceed? This action cannot be undone.</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeConfirmModal(false)">
+            Cancel
+          </button>
+          <button class="btn-delete" onclick="closeConfirmModal(true)">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Toast Notification Container -->
+    <div id="toast-notification" class="toast">
+      <i class="fa-solid fa-circle-info"></i>
+      <span id="toast-message">Notification message here</span>
+    </div>
+
+    <script>
+      // Single Sidebar Toggle Elements
+      const openSidebarBtn = document.getElementById("open-sidebar-btn");
+      const closeSidebarBtn = document.getElementById("close-sidebar-btn");
+      const singleSidebar = document.getElementById("single-sidebar");
+      const sidebarOverlay = document.getElementById("sidebar-overlay");
+
+      function openSidebar() {
+        singleSidebar.classList.add("active");
+        sidebarOverlay.classList.add("active");
+      }
+
+      function closeSidebar() {
+        singleSidebar.classList.remove("active");
+        sidebarOverlay.classList.remove("active");
+      }
+
+      openSidebarBtn.addEventListener("click", openSidebar);
+      closeSidebarBtn.addEventListener("click", closeSidebar);
+      sidebarOverlay.addEventListener("click", closeSidebar);
+
+      // Initialize Supabase Client
+      const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
+
+      const { createClient } = supabase;
+      const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      function showToast(message) {
+        const toast = document.getElementById("toast-notification");
+        const toastMessage = document.getElementById("toast-message");
+
+        toastMessage.textContent = message;
+        toast.classList.add("show");
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      async function loadPosts() {
+        const feedEl = document.getElementById("posts-feed");
+        const upvotedPosts = JSON.parse(
+          localStorage.getItem("upvotedPosts") || "[]",
+        );
+
+        let { data: posts, error } = await db
+          .from("posts")
+          .select("*, comments(*)")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          console.warn(
+            "Relational query failed, attempting fallback...",
+            error,
+          );
+          const fallback = await db
+            .from("posts")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+          if (fallback.error) {
+            console.error("Error fetching posts:", fallback.error);
+            feedEl.innerHTML = `<div class="empty-state">Error loading posts. Please try again later.</div>`;
+            return;
+          }
+          posts = fallback.data.map((p) => ({ ...p, comments: [] }));
+        }
+
+        if (!posts || posts.length === 0) {
+          feedEl.innerHTML = `<div class="empty-state">No discussions yet. Be the first to share!</div>`;
+          return;
+        }
+
+        feedEl.innerHTML = posts
+          .map((post) => {
+            const isVoted = upvotedPosts.includes(post.id);
+            const commentList = post.comments || [];
+            const commentCount = commentList.length;
+
+            const commentsMarkup = commentList
+              .map(
+                (c) => `
          <div class="comment-item">
            <div class="comment-header">
              <span class="comment-author">${escapeHTML(c.username)}</span>
@@ -874,12 +936,14 @@ const commentsMarkup = commentList.map(c => `
            </div>
            <p class="comment-text">${escapeHTML(c.content)}</p>
          </div>
-       `).join('');
+       `,
+              )
+              .join("");
 
-return `
+            return `
          <div class="post-card">
            <div class="vote-box">
-             <button class="vote-btn ${isVoted ? 'voted' : ''}" onclick="upvotePost(${post.id}, ${post.upvotes})">
+             <button class="vote-btn ${isVoted ? "voted" : ""}" onclick="upvotePost(${post.id}, ${post.upvotes})">
                <i class="fa-solid fa-arrow-up"></i>
              </button>
              <span class="vote-count" id="vote-count-${post.id}">${post.upvotes}</span>
@@ -916,233 +980,281 @@ return `
            </div>
          </div>
        `;
-}).join('');
-}
+          })
+          .join("");
+      }
 
-function toggleComments(postId) {
-const section = document.getElementById(`comments-section-${postId}`);
-if (section) {
-section.classList.toggle("open");
-}
-}
+      function toggleComments(postId) {
+        const section = document.getElementById(`comments-section-${postId}`);
+        if (section) {
+          section.classList.toggle("open");
+        }
+      }
 
-async function submitComment(event, postId) {
-event.preventDefault();
-const usernameInput = document.getElementById(`comment-user-${postId}`);
-const textInput = document.getElementById(`comment-text-${postId}`);
+      async function submitComment(event, postId) {
+        event.preventDefault();
+        const usernameInput = document.getElementById(`comment-user-${postId}`);
+        const textInput = document.getElementById(`comment-text-${postId}`);
 
-const username = usernameInput.value.trim();
-const content = textInput.value.trim();
+        const username = usernameInput.value.trim();
+        const content = textInput.value.trim();
 
-const { error } = await db
-.from("comments")
-.insert([{ post_id: postId, username, content }]);
+        const { error } = await db
+          .from("comments")
+          .insert([{ post_id: postId, username, content }]);
 
-if (error) {
-showToast("Failed to post comment: " + error.message);
-return;
-}
+        if (error) {
+          showToast("Failed to post comment: " + error.message);
+          return;
+        }
 
-showToast("Comment added!");
-usernameInput.value = "";
-textInput.value = "";
-loadPosts();
-}
+        showToast("Comment added!");
+        usernameInput.value = "";
+        textInput.value = "";
+        loadPosts();
+      }
 
-let pendingDelete = { id: null, type: null };
+      let pendingDelete = { id: null, type: null };
 
-function deletePost(postId) {
-pendingDelete = { id: postId, type: 'post' };
-document.querySelector("#confirm-modal h3").textContent = "Delete Post?";
-document.querySelector("#confirm-modal p").textContent = "Are you sure you want to delete this post? This action cannot be undone.";
-document.getElementById("confirm-modal").classList.add("show");
-}
+      function deletePost(postId) {
+        pendingDelete = { id: postId, type: "post" };
+        document.querySelector("#confirm-modal h3").textContent =
+          "Delete Post?";
+        document.querySelector("#confirm-modal p").textContent =
+          "Are you sure you want to delete this post? This action cannot be undone.";
+        document.getElementById("confirm-modal").classList.add("show");
+      }
 
-function deleteComment(commentId) {
-pendingDelete = { id: commentId, type: 'comment' };
-document.querySelector("#confirm-modal h3").textContent = "Delete Comment?";
-document.querySelector("#confirm-modal p").textContent = "Are you sure you want to delete this comment?";
-document.getElementById("confirm-modal").classList.add("show");
-}
+      function deleteComment(commentId) {
+        pendingDelete = { id: commentId, type: "comment" };
+        document.querySelector("#confirm-modal h3").textContent =
+          "Delete Comment?";
+        document.querySelector("#confirm-modal p").textContent =
+          "Are you sure you want to delete this comment?";
+        document.getElementById("confirm-modal").classList.add("show");
+      }
 
-async function closeConfirmModal(confirmed) {
-const modal = document.getElementById("confirm-modal");
-modal.classList.remove("show");
+      async function closeConfirmModal(confirmed) {
+        const modal = document.getElementById("confirm-modal");
+        modal.classList.remove("show");
 
-if (confirmed && pendingDelete.id !== null) {
-const { id, type } = pendingDelete;
-pendingDelete = { id: null, type: null };
+        if (confirmed && pendingDelete.id !== null) {
+          const { id, type } = pendingDelete;
+          pendingDelete = { id: null, type: null };
 
-if (type === 'post') {
-const { error } = await db.from('posts').delete().eq('id', id);
-if (error) {
-showToast("Error deleting post: " + error.message);
-} else {
-showToast("Post deleted successfully!");
-loadPosts();
-}
-} else if (type === 'comment') {
-const { error } = await db.from('comments').delete().eq('id', id);
-if (error) {
-showToast("Error deleting comment: " + error.message);
-} else {
-showToast("Comment deleted!");
-loadPosts();
-}
-}
-} else {
-pendingDelete = { id: null, type: null };
-}
-}
+          if (type === "post") {
+            const { error } = await db.from("posts").delete().eq("id", id);
+            if (error) {
+              showToast("Error deleting post: " + error.message);
+            } else {
+              showToast("Post deleted successfully!");
+              loadPosts();
+            }
+          } else if (type === "comment") {
+            const { error } = await db.from("comments").delete().eq("id", id);
+            if (error) {
+              showToast("Error deleting comment: " + error.message);
+            } else {
+              showToast("Comment deleted!");
+              loadPosts();
+            }
+          }
+        } else {
+          pendingDelete = { id: null, type: null };
+        }
+      }
 
-document.getElementById("create-post-form").addEventListener("submit", async (e) => {
-e.preventDefault();
+      document
+        .getElementById("create-post-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-const username = document.getElementById("post-username").value.trim();
-const category = document.getElementById("post-category").value;
-const title = document.getElementById("post-title").value.trim();
-const content = document.getElementById("post-content").value.trim();
+          const username = document
+            .getElementById("post-username")
+            .value.trim();
+          const category = document.getElementById("post-category").value;
+          const title = document.getElementById("post-title").value.trim();
+          const content = document.getElementById("post-content").value.trim();
 
-const { error } = await db
-.from("posts")
-.insert([{ username, category, title, content, upvotes: 0 }]);
+          const { error } = await db
+            .from("posts")
+            .insert([{ username, category, title, content, upvotes: 0 }]);
 
-if (error) {
-showToast("Failed to submit post: " + error.message);
-return;
-}
+          if (error) {
+            showToast("Failed to submit post: " + error.message);
+            return;
+          }
 
-document.getElementById("create-post-form").reset();
-toggleForm();
-showToast("Post published! +5 XP");
+          document.getElementById("create-post-form").reset();
+          toggleForm();
+          showToast("Post published! +5 XP");
 
-if (typeof addXP === "function") {
-addXP(5);
-}
+          if (typeof addXP === "function") {
+            addXP(5);
+          }
 
-loadPosts();
-});
+          loadPosts();
+        });
 
-async function upvotePost(id, currentVotes) {
-const upvotedPosts = JSON.parse(localStorage.getItem('upvotedPosts') || '[]');
+      async function upvotePost(id, currentVotes) {
+        const upvotedPosts = JSON.parse(
+          localStorage.getItem("upvotedPosts") || "[]",
+        );
 
-if (upvotedPosts.includes(id)) {
-showToast("You have already upvoted this post!");
-return;
-}
+        if (upvotedPosts.includes(id)) {
+          showToast("You have already upvoted this post!");
+          return;
+        }
 
-const newUpvotes = currentVotes + 1;
-const voteEl = document.getElementById(`vote-count-${id}`);
-if (voteEl) voteEl.textContent = newUpvotes;
+        const newUpvotes = currentVotes + 1;
+        const voteEl = document.getElementById(`vote-count-${id}`);
+        if (voteEl) voteEl.textContent = newUpvotes;
 
-const { error } = await db
-.from("posts")
-.update({ upvotes: newUpvotes })
-.eq("id", id);
+        const { error } = await db
+          .from("posts")
+          .update({ upvotes: newUpvotes })
+          .eq("id", id);
 
-if (error) {
-console.error("Error updating upvote:", error);
-loadPosts();
-} else {
-upvotedPosts.push(id);
-localStorage.setItem('upvotedPosts', JSON.stringify(upvotedPosts));
-loadPosts();
-}
-}
+        if (error) {
+          console.error("Error updating upvote:", error);
+          loadPosts();
+        } else {
+          upvotedPosts.push(id);
+          localStorage.setItem("upvotedPosts", JSON.stringify(upvotedPosts));
+          loadPosts();
+        }
+      }
 
-function toggleForm() {
-const formCard = document.getElementById("post-form-card");
-formCard.style.display = formCard.style.display === "none" ? "block" : "none";
-}
+      function toggleForm() {
+        const formCard = document.getElementById("post-form-card");
+        formCard.style.display =
+          formCard.style.display === "none" ? "block" : "none";
+      }
 
-function escapeHTML(str) {
-return (str || '').replace(/[&<>'"]/g, 
-tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-);
-}
+      function escapeHTML(str) {
+        return (str || "").replace(
+          /[&<>'"]/g,
+          (tag) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              "'": "&#39;",
+              '"': "&quot;",
+            })[tag] || tag,
+        );
+      }
 
-document.addEventListener("DOMContentLoaded", loadPosts);
-</script>
-<script src="script.js"></script>
-  <!-- Floating Pomodoro Widget -->
-  <div class="pomodoro-widget" id="pomodoro-widget">
-    <button class="widget-toggle" onclick="toggleWidget()">
-      <i class="fa-solid fa-stopwatch"></i>
-      <span id="widget-min-display">25:00</span>
-    </button>
-
-    <div class="widget-card hidden" id="widget-card">
-      <div class="pomodoro-header">
+      document.addEventListener("DOMContentLoaded", loadPosts);
+    </script>
+    <script src="script.js"></script>
+    <!-- Floating Pomodoro Widget -->
+    <div class="pomodoro-widget" id="pomodoro-widget">
+      <button class="widget-toggle" onclick="toggleWidget()">
         <i class="fa-solid fa-stopwatch"></i>
-        <span>Focus Timer</span>
+        <span id="widget-min-display">25:00</span>
+      </button>
+
+      <div class="widget-card hidden" id="widget-card">
+        <div class="pomodoro-header">
+          <i class="fa-solid fa-stopwatch"></i>
+          <span>Focus Timer</span>
+        </div>
+        <div class="timer-display" id="timer-display">25:00</div>
+        <div class="timer-controls">
+          <button id="start-btn" onclick="startTimer()">Start</button>
+          <button id="pause-btn" onclick="pauseTimer()" class="hidden">
+            Pause
+          </button>
+          <button id="reset-btn" onclick="resetTimer()">Reset</button>
+        </div>
+        <p class="timer-status" id="timer-status">Ready to study?</p>
       </div>
-      <div class="timer-display" id="timer-display">25:00</div>
-      <div class="timer-controls">
-        <button id="start-btn" onclick="startTimer()">Start</button>
-        <button id="pause-btn" onclick="pauseTimer()" class="hidden">Pause</button>
-        <button id="reset-btn" onclick="resetTimer()">Reset</button>
-      </div>
-      <p class="timer-status" id="timer-status">Ready to study?</p>
     </div>
-  </div>
-<!-- Lo-Fi Music Widget -->
-<div class="mp3-widget minimized" id="music-widget" onclick="handleWidgetClick(event)">
-<audio id="focus-audio" preload="metadata"></audio>
+    <!-- Lo-Fi Music Widget -->
+    <div
+      class="mp3-widget minimized"
+      id="music-widget"
+      onclick="handleWidgetClick(event)"
+    >
+      <audio id="focus-audio" preload="metadata"></audio>
 
-<button class="widget-circle-btn" aria-label="Open Music Player">
-<i class="fa-solid fa-compact-disc"></i>
-</button>
+      <button class="widget-circle-btn" aria-label="Open Music Player">
+        <i class="fa-solid fa-compact-disc"></i>
+      </button>
 
-<div class="music-card-content">
-<div class="widget-top-bar">
-<button class="minimize-btn" onclick="toggleWidgetExpand(event)" title="Minimize">
-<i class="fa-solid fa-xmark"></i>
-</button>
-</div>
+      <div class="music-card-content">
+        <div class="widget-top-bar">
+          <button
+            class="minimize-btn"
+            onclick="toggleWidgetExpand(event)"
+            title="Minimize"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
 
-<div class="player-main">
-<div class="disc-icon" id="disc-icon">
-<i class="fa-solid fa-compact-disc"></i>
-</div>
-<div class="track-details">
-<span class="track-title" id="current-title">Lo-Fi Rain & Beats</span>
-<span class="track-status" id="audio-status">Paused</span>
-</div>
+        <div class="player-main">
+          <div class="disc-icon" id="disc-icon">
+            <i class="fa-solid fa-compact-disc"></i>
+          </div>
+          <div class="track-details">
+            <span class="track-title" id="current-title"
+              >Lo-Fi Rain & Beats</span
+            >
+            <span class="track-status" id="audio-status">Paused</span>
+          </div>
 
-<div class="controls-row">
-<button class="control-btn" onclick="prevTrack(event)"><i class="fa-solid fa-backward-step"></i></button>
-<button class="play-btn" onclick="toggleCustomAudio(event)" id="custom-play-btn">
-<i class="fa-solid fa-play" id="play-icon"></i>
-</button>
-<button class="control-btn" onclick="nextTrack(event)"><i class="fa-solid fa-forward-step"></i></button>
-</div>
-</div>
+          <div class="controls-row">
+            <button class="control-btn" onclick="prevTrack(event)">
+              <i class="fa-solid fa-backward-step"></i>
+            </button>
+            <button
+              class="play-btn"
+              onclick="toggleCustomAudio(event)"
+              id="custom-play-btn"
+            >
+              <i class="fa-solid fa-play" id="play-icon"></i>
+            </button>
+            <button class="control-btn" onclick="nextTrack(event)">
+              <i class="fa-solid fa-forward-step"></i>
+            </button>
+          </div>
+        </div>
 
-<div class="playlist-header" onclick="togglePlaylist(event)">
-<span><i class="fa-solid fa-list-ul"></i> STUDY PLAYLIST</span>
-<button class="collapse-btn"><i class="fa-solid fa-chevron-up" id="collapse-icon"></i></button>
-</div>
+        <div class="playlist-header" onclick="togglePlaylist(event)">
+          <span><i class="fa-solid fa-list-ul"></i> STUDY PLAYLIST</span>
+          <button class="collapse-btn">
+            <i class="fa-solid fa-chevron-up" id="collapse-icon"></i>
+          </button>
+        </div>
 
-<div class="playlist-scroll-area" id="playlist-container">
-<ul class="playlist">
-<li class="playlist-item active" onclick="playSelectedTrack(0, event)">
-<span><i class="fa-solid fa-cloud-rain"></i> Zelda Lullaby</span>
-</li>
-<li class="playlist-item" onclick="playSelectedTrack(1, event)">
-<span><i class="fa-solid fa-coffee"></i> Saria's Song</span>
-</li>
-<li class="playlist-item" onclick="playSelectedTrack(2, event)">
-<span><i class="fa-solid fa-brain"></i> Song Of Healing</span>
-</li>
-<li class="playlist-item" onclick="playSelectedTrack(3, event)">
-<span><i class="fa-solid fa-fire"></i> Great Fairy Fountain</span>
-</li>
-<li class="playlist-item" onclick="playSelectedTrack(4, event)">
-<span><i class="fa-solid fa-tree"></i> Mipha Theme</span>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</body>
+        <div class="playlist-scroll-area" id="playlist-container">
+          <ul class="playlist">
+            <li
+              class="playlist-item active"
+              onclick="playSelectedTrack(0, event)"
+            >
+              <span><i class="fa-solid fa-cloud-rain"></i> Zelda Lullaby</span>
+            </li>
+            <li class="playlist-item" onclick="playSelectedTrack(1, event)">
+              <span><i class="fa-solid fa-coffee"></i> Saria's Song</span>
+            </li>
+            <li class="playlist-item" onclick="playSelectedTrack(2, event)">
+              <span><i class="fa-solid fa-brain"></i> Song Of Healing</span>
+            </li>
+            <li class="playlist-item" onclick="playSelectedTrack(3, event)">
+              <span><i class="fa-solid fa-fire"></i> Great Fairy Fountain</span>
+            </li>
+            <li class="playlist-item" onclick="playSelectedTrack(4, event)">
+              <span><i class="fa-solid fa-tree"></i> Mipha Theme</span>
+            </li>
+            <li class="playlist-item" onclick="playSelectedTrack(5, event)">
+              <span><i class="fa-solid fa-tree"></i> Best Friends</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
