@@ -141,3 +141,13 @@ For a public production deployment, add real user authentication, CSRF protectio
 - PDO MySQL: https://www.php.net/manual/en/ref.pdo-mysql.php
 - random_bytes: https://www.php.net/manual/en/function.random-bytes.php
 - hash_equals: https://www.php.net/manual/en/function.hash-equals.php
+
+## InfinityFree deployment
+
+For production hosting on InfinityFree, use:
+
+- `database/infinityfree.sql` — imports tables into an already-created InfinityFree database without `CREATE DATABASE` or `USE`.
+- `config.infinityfree.example.php` — template for the server-only `config.php`.
+- `INFINITYFREE.md` — complete upload, database, API testing, and troubleshooting guide.
+
+The real `php-sql/config.php` is excluded by `.gitignore` and must be created on the hosting server with the credentials shown by InfinityFree.
