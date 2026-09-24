@@ -1,0 +1,16 @@
+# Local/development dependencies
+node_modules/
+
+# Environment and production secrets
+.env
+.env.*
+!.env.example
+
+# PHP production configuration
+php-sql/config.php
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,6 @@
+# Apache: keep configuration/private files inaccessible.
+<FilesMatch "^(config\.php|config\.example\.php)$">
+    Require all denied
+</FilesMatch>
+
+Options -Indexes

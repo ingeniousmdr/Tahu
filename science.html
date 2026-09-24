@@ -14,12 +14,7 @@
       src="https://kit.fontawesome.com/c8c917a1e5.js"
       crossorigin="anonymous"
     ></script>
-    <script src="script.js"></script>
-
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
+    <script src="script.js"></script><style>
     * {
       box-sizing: border-box;
       font-family: 'Quicksand', sans-serif;
@@ -572,55 +567,7 @@
         btnElement.innerHTML = `<i class="fa-solid fa-eye"></i> Reveal Memory Trick`;
       }
     }
-
-    // Supabase Dynamic Data Fetcher (Connected to admin.html)
-    const SUPABASE_URL = "https://dufdnzwprojhrnfbhvhc.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_-shXpPVSrrqIKJHcIWwDcw_UUOWouwg";
-    
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function fetchSupabaseTips() {
-      const tipsContainer = document.getElementById('tips-container');
-
-      const { data: tips, error } = await supabaseClient
-        .from('tips')
-        .select('*')
-        .eq('subject', 'science')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching dynamic tips:', error.message);
-        return;
-      }
-
-      tips.forEach((tip) => {
-        const card = document.createElement('div');
-        card.className = 'tip-card science-card';
-        card.innerHTML = `
-          <div class="card-header-flex">
-            <span class="badge science"><i class="fa-solid fa-flask"></i> Science</span>
-            <span class="xp-tag">+10 XP</span>
-          </div>
-          <h3>${tip.title}</h3>
-          <div class="interactive-prompt">
-            <div class="tip-answer hidden">
-              <p class="explanation">${tip.content}</p>
-            </div>
-            <button class="reveal-btn" onclick="toggleTipAnswer(this)">
-              <i class="fa-solid fa-eye"></i> Reveal Memory Trick
-            </button>
-          </div>
-          <div class="card-footer">
-            <button class="complete-btn" onclick="markTipComplete('science', 'tip-db-${tip.id}', this)">
-              <i class="fa-regular fa-circle-check"></i> Mark as Learned (+10 XP)
-            </button>
-          </div>
-        `;
-        tipsContainer.appendChild(card);
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', fetchSupabaseTips);
-  </script>
+    <script src="php-sql/frontend/tahu-db.js"></script>
+    <script src="php-sql/frontend/subject-tips.js"></script>
 </body>
 </html>

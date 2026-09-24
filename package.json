@@ -1,5 +1,4 @@
 {
-  "dependencies": {
-    "@supabase/server": "^1.4.1"
-  }
+  "private": true,
+  "description": "Tahu frontend with PHP + MySQL backend"
 }
