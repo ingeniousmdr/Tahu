@@ -222,6 +222,9 @@
     document.getElementById("sidebar-overlay")?.classList.remove("active");
   }
 
+  window.closeConfirmModal = closeConfirmModal;
+  window.toggleForm = toggleForm;
+
   window.TahuCommunity = {
     submitComment,
     deletePost: id => askDelete(id, "post"),
