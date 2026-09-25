@@ -133,49 +133,10 @@ a {
 .streak-icon {
   color: #ff6b00;
 }
-/* Left Sidebar Navigation (Vertical Fixed) */
-@media (max-width: 768px) {
-  /* Dock the navbar to the top-left edge */
-  .navbar {
-    position: fixed;
-    top: 20px;
-    left: 12px;
-    width: 220px; /* Adjust sidebar width as needed */
-    height: calc(100vh - 40px); /* Full height minus margins */
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 20px;
-    padding: 24px 16px;
-    margin: 0;
-    z-index: 100;
-    box-sizing: border-box;
-    overflow-y: auto; /* Scrollable if items overflow */
-  }
+/* Mobile navigation is page-specific.
+   Community uses its own off-canvas sidebar; the global stylesheet
+   must not convert the shared navbar into a fixed mobile sidebar. */
 
-  .nav-links {
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-  }
-
-  .nav-btn {
-    width: 100%;
-    text-align: center;
-    box-sizing: border-box;
-  }
-
-  .streak-badge {
-    justify-content: center;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* Shift the rest of the page content so the sidebar doesn't cover it */
-  body {
-    padding-left: 240px; /* Should be slightly wider than the sidebar width */
-  }
-}
 /* ==========================================
    3. MAIN MENU CARDS
    ========================================== */
